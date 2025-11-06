@@ -46,14 +46,13 @@ function shuffle(array) {
   while (attempts < maxAttempts) {
     attempts++;
 
-    // Simple Fisher-Yates shuffle
     shuffled = [...array];
     for (let i = shuffled.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
 
-    // Check constraints
+    // Check the two constraints
     let valid = true;
     for (let i = 1; i < shuffled.length; i++) {
       const curr = shuffled[i];
@@ -65,7 +64,7 @@ function shuffle(array) {
         break;
       }
 
-      // 2. No more than 3 same categories consecutively
+      // 2. No 4 same categories consecutively
       if (
         i >= 3 &&
         shuffled[i - 1].category === curr.category &&
@@ -88,3 +87,31 @@ let stim_name_b = buildStimuli(names_b, REP_NAME)
 
 let ned_strttl_stimuli = shuffle([...stim_var_a, ...stim_var_b]);
 let ned_mig_stimuli = shuffle([...stim_name_a, ...stim_name_b]);
+
+// Set fixed key mappings for the four counterbalanced groups
+const COUNTERBALANCED_MAPPINGS = {
+  group1: {
+    'STANDAARD NEDERLANDS': 'left',
+    'STRAATTAAL': 'right',
+    'NIET MIGRANT': 'left',
+    'MIGRANT': 'right'
+  },
+  group2: {
+    'STANDAARD NEDERLANDS': 'right',
+    'STRAATTAAL': 'left',
+    'NIET MIGRANT': 'left',
+    'MIGRANT': 'right'
+  },
+  group3: {
+    'STANDAARD NEDERLANDS': 'left',
+    'STRAATTAAL': 'right',
+    'NIET MIGRANT': 'right',
+    'MIGRANT': 'left'
+  },
+  group4: {
+    'STANDAARD NEDERLANDS': 'right',
+    'STRAATTAAL': 'left',
+    'NIET MIGRANT': 'right',
+    'MIGRANT': 'left'
+  }
+};

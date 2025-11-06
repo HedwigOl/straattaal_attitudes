@@ -4,6 +4,11 @@ function assignStimulusKeys(stimuli, keyConfiguration) {
     stim_key_association: keyConfiguration[s.category]
   }));
 }
+// COUNTERBALANCING
+function getKeyConfigurationForGroup(groupName) {
+  return COUNTERBALANCED_MAPPINGS[groupName];
+}
+
 
 // RANDOMIZATION
 // Randomize key configuration language varieties
@@ -20,12 +25,34 @@ function reversekeyConfiguration(keyConfiguration) {
   );
 }
 
-// Set key configurations for all blocks
-let keyConfigurationBlock1 = randomkeyConfiguration('STANDAARD NEDERLANDS', 'STRAATTAAL');
-let keyConfigurationBlock2 = randomkeyConfiguration('NIET MIGRANT', 'MIGRANT');
-let keyConfigurationBlock3 = {...keyConfigurationBlock1, ...keyConfigurationBlock2};
-let keyConfigurationBlock4 = reversekeyConfiguration(keyConfigurationBlock2);
-let keyConfigurationBlock5 = {...keyConfigurationBlock1, ...keyConfigurationBlock4};
+function setup_key_configuration(groupName) {
+  const keyConfig = getKeyConfigurationForGroup(groupName);
+
+  const keyConfigurationBlock1 = {
+    'STANDAARD NEDERLANDS': keyConfig['STANDAARD NEDERLANDS'],
+    'STRAATTAAL': keyConfig['STRAATTAAL']};
+  const keyConfigurationBlock2 = {
+    'NIET MIGRANT': keyConfig['NIET MIGRANT'],
+    'MIGRANT': keyConfig['MIGRANT']};
+  const keyConfigurationBlock3 = { ...keyConfigurationBlock1, ...keyConfigurationBlock2 };
+  const keyConfigurationBlock4 = reversekeyConfiguration(keyConfigurationBlock2);
+  const keyConfigurationBlock5 = { ...keyConfigurationBlock1, ...keyConfigurationBlock4 };
+
+  return {
+    keyConfigurationBlock1,
+    keyConfigurationBlock2,
+    keyConfigurationBlock3,
+    keyConfigurationBlock4,
+    keyConfigurationBlock5
+  };
+}
+
+// Set key configurations for all blocks (randomised version)
+//let keyConfigurationBlock1 = randomkeyConfiguration('STANDAARD NEDERLANDS', 'STRAATTAAL');
+//let keyConfigurationBlock2 = randomkeyConfiguration('NIET MIGRANT', 'MIGRANT');
+//let keyConfigurationBlock3 = {...keyConfigurationBlock1, ...keyConfigurationBlock2};
+//let keyConfigurationBlock4 = reversekeyConfiguration(keyConfigurationBlock2);
+//let keyConfigurationBlock5 = {...keyConfigurationBlock1, ...keyConfigurationBlock4};
 
 //alternate stimuli using procedure of Greenwald et al., 2022
 function alternateStimuli(targets_A, targets_B, attributes_A, attributes_B) {

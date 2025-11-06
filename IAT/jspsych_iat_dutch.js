@@ -58,7 +58,7 @@ var jsPsychIatHtml = (function (jspsych) {
           bottom_instructions: {
               type: jspsych.ParameterType.HTML_STRING,
               pretty_name: "Bottom instructions",
-              default: "<p>Als je op de verkeerde knop drukt, verschijnt er een rode X. Druk op een toets om verder te gaan.</p>",
+              default: "<p>Als u incorrect antwoordt, verschijnt er een rode X. Druk op de andere toets om verder te gaan.</p>",
           },
           /** If true, in order to advance to the next trial after a wrong key press the user will be forced to press the correct key. */
           force_correct_key_press: {

@@ -48,17 +48,21 @@ let general_iat_instruction = {
   choices: ["Volgende"]
 };
 
-let combined_stimuli = alternateStimuli(stim_var_a, stim_var_b, stim_name_a, stim_name_b, keyConfigurationBlock3)
-
+function createFullIAT (cb_keys){
 // Trial blocks of full IAT
-let block1 = createIATBlock(keyConfigurationBlock1, ned_strttl_stimuli, true,  1)
-let block2 = createIATBlock(keyConfigurationBlock2, ned_mig_stimuli,    true,  2)
-let block3 = createIATBlock(keyConfigurationBlock3, combined_stimuli,   true,  3)
-let block4 = createIATBlock(keyConfigurationBlock3, combined_stimuli,   false, 3)
-let block5 = createIATBlock(keyConfigurationBlock4, ned_mig_stimuli,    true,  4)
-let block6 = createIATBlock(keyConfigurationBlock5, combined_stimuli,   true,  5)
-let block7 = createIATBlock(keyConfigurationBlock5, combined_stimuli,   false, 5)
-let IAT = {timeline:[block1, block2, block3, block4, block5, block6, block7]}; 
+  let block1 = createIATBlock(cb_keys.keyConfigurationBlock1, ned_strttl_stimuli, true, 1)
+  let block2 = createIATBlock(cb_keys.keyConfigurationBlock2, ned_mig_stimuli, true, 2)
+  let block3 = createIATBlock(cb_keys.keyConfigurationBlock3, alternateStimuli(stim_var_a, stim_var_b, stim_name_a, stim_name_b, cb_keys.keyConfigurationBlock3), true, 3)
+  let block4 = createIATBlock(cb_keys.keyConfigurationBlock3, alternateStimuli(stim_var_a, stim_var_b, stim_name_a, stim_name_b, cb_keys.keyConfigurationBlock3), false, 3)
+  let block5 = createIATBlock(cb_keys.keyConfigurationBlock4, ned_mig_stimuli, true, 4)
+  let block6 = createIATBlock(cb_keys.keyConfigurationBlock5, alternateStimuli(stim_var_a, stim_var_b, stim_name_a, stim_name_b, cb_keys.keyConfigurationBlock5), true, 5)
+  let block7 = createIATBlock(cb_keys.keyConfigurationBlock5, alternateStimuli(stim_var_a, stim_var_b, stim_name_a, stim_name_b, cb_keys.keyConfigurationBlock5), false, 5)
+
+  const blocks = [block1, block2, block3, block4, block5, block6, block7].map(b => b || []);
+
+  return { timeline: blocks.flat() };
+
+}
 
 //Question about being disturbed in the experiment
 let disturbed = {
@@ -85,6 +89,19 @@ let end_screen = {
 
 // Create timeline and run it
 function main() {
-  let timeline = [consent_procedure, prolific_ID, environment_check, general_iat_instruction, IAT, expl_questionnaire, disturbed, demographicsPage1, demographicsPage2, end_screen];
-  jsPsych.run(timeline);
+  uil.setAccessKey(ACCESS_KEY);
+  uil.stopIfExperimentClosed();
+
+  const group_name = "group1";
+
+  // Set key configuration based on counterbalanced group assignment
+  //uil.session.start(ACCESS_KEY, (group_name) => {
+
+    const cb_keys = setup_key_configuration(group_name);
+    let IAT = createFullIAT(cb_keys);
+
+    let timeline = [consent_procedure, prolific_ID, environment_check, general_iat_instruction, IAT, expl_questionnaire, disturbed, demographicsPage1, demographicsPage2, end_screen];
+    
+    jsPsych.run(timeline);
+  //});
 };
