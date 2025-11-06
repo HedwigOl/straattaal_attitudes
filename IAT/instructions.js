@@ -16,9 +16,9 @@ const information_letter_1 =
 
       <h3>Hoe verloopt het experiment?</h3>
       <p>Het experiment bestaat uit twee delen. Na het accepteren van de voorwaarden begint het eerste deel.
-      In dit deel zult u in verschillende rondes woorden en namen in twee groepen moeten classificeren
-      (max. 4 minuten). In het tweede deel krijgt u enkele vragen over uzelf en over wat u van Straattaal
-      vindt (max. 2 minuten).<br>
+      In dit deel zult u in verschillende rondes woorden en namen in twee groepen moeten categoriseren
+      (max. 10 minuten). In het tweede deel krijgt u enkele vragen over uzelf en over uw associaties met Straattaal en Straattaalsprekers
+       (max. 2 minuten).<br>
       Deelname aan dit onderzoek is volledig vrijwillig en u kunt op elk moment besluiten om niet deel te nemen
       of uw deelname te beëindigen, zonder opgaaf van reden en zonder nadelige gevolgen.</p>
     </div>`
@@ -71,16 +71,70 @@ const consent_text =
 
 const no_consent = 
     `<div class = "instruction center-text">
-      <p>Omdat u niet wilt deelnemen aan dit onderzoek, vragen wij u deze vragenlijst te sluiten en uw inzending op Prolific af te ronden door op de knop ‘Stoppen zonder te voltooien’ te klikken.</p>
+      <p>Omdat u niet wilt deelnemen aan dit onderzoek, vragen wij u deze vragenlijst te sluiten en uw inzending op Prolific af te ronden door op de knop <strong>‘Stoppen zonder te voltooien’</strong> te klikken.</p>
     </div>`
 
-const instruction_demographics = 
-    `<h3>Demografische gegevens</h3>
-    <p>Vul alstublieft de volgende informatie in:</p>`
+const iat_instructions = 
+    `<div style="max-width:900px; margin:auto; font-family:sans-serif; text-align:left;">
+      <p style="font-size:1.2rem;">
+        In het eerste deel van dit experiment zult u steeds woorden en namen zo snel en correct mogelijk categoriseren met behulp van de <b>'f'</b> en <b>'j'</b> toetsen.
+        Dit zijn de vier categoriën en de woorden of namen die bij iedere categorie horen:
+      </p>
 
+      <table style="width:100%; border-collapse:collapse; font-size:1rem; margin:20px 0;">
+        <thead>
+          <tr style="background:#f5f5f5;">
+            <th style="border:1px solid #ccc; padding:8px; width:30%;">Categorie</th>
+            <th style="border:1px solid #ccc; padding:8px;">Items</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="border:1px solid #ccc; padding:8px;"><b>Straattaal</b></td>
+            <td style="border:1px solid #ccc; padding:8px;">doekoe, fittie, osso, waggie, pokoe, patta</td>
+          </tr>
+          <tr>
+            <td style="border:1px solid #ccc; padding:8px;"><b>Standaard Nederlands</b></td>
+            <td style="border:1px solid #ccc; padding:8px;">geld, ruzie, huis, auto, liedje, schoen</td>
+          </tr>
+                    <tr>
+            <td style="border:1px solid #ccc; padding:8px;"><b>Migrant</b></td>
+            <td style="border:1px solid #ccc; padding:8px;">Amira, Fatma, Samira, Salma, Mohamed, Ayoub, Murat, Ilias</td>
+          </tr>
+          <tr>
+            <td style="border:1px solid #ccc; padding:8px;"><b>Niet migrant</b></td>
+            <td style="border:1px solid #ccc; padding:8px;">Anne, Esther, Julia, Laura, Martijn, Dennis, Jesse, Thomas</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p style="font-size:1.1rem;">
+        Dit experiment bestaat uit vijf kleinere delen. De instructies veranderen voor ieder deel. <b>Dus let goed op!</b>
+      </p>
+    </div>
+  `
+const environment_text = `
+<div style="max-width: 700px; margin: 0 auto; text-align: left; line-height: 1.6;">
+  <p><strong>Om ervoor te zorgen dat de resultaten van dit experiment zo nauwkeurig mogelijk zijn, vragen wij u het volgende te doen:</strong></p>
+
+  <ul>
+    <li>Zorg dat u zich bevindt in een rustige omgeving.</li>
+    <li>Minimaliseer eventuele afleiding (zet bijvoorbeeld uw telefoon op stil of uit).</li>
+    <li>Gebruik een QWERTY-toetsenbord.</li>
+    <li>Sluit alle overige tabbladen en programma's op uw computer zodat de reactietijden zo precies mogelijk gemeten kunnen worden.</li>
+  </ul>
+
+  <p>Door deze stappen te volgen helpt u ons om betrouwbare data te verzamelen. Vink onderstaande vakjes aan om te bevestigen dat u deze stappen gevolgd heeft.</p>
+
+    <label><input type="checkbox" class="check-item"> Ik zit in een rustige omgeving.</label><br>
+    <label><input type="checkbox" class="check-item"> Ik heb alle mogelijke afleidingen geëlimineerd.</label><br>
+    <label><input type="checkbox" class="check-item"> Ik gebruik een QWERTY-toetsenbord.</label><br>
+    <label><input type="checkbox" class="check-item"> Ik heb alle andere tabbladen en programma's gesloten.</label><br> 
+    <br>
+  </div>
+  `
 const end_experiment = 
     `<div class = "instruction center-text">
       <h3>Bedankt voor uw deelname!</h3>
       <p>Klik op de onderstaande knop om terug te gaan naar Prolific en uw deelname te registreren.</p>
     </div>`
-

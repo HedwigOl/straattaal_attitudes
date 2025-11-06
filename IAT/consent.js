@@ -67,8 +67,3 @@ let if_node_consent = {
         return !consent_given;
     }
 };
-
-let consent_procedure = {
-    timeline: [info_pages, consent_page, if_node_consent]
-};
-

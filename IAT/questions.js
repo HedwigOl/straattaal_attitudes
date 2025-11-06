@@ -1,208 +1,162 @@
 // --- QUESTIONS ---
 
-//record prolific ID
-let prolific_ID = {
-  type: jsPsychSurveyText,
-  questions: [{prompt: 'Wat is uw Prolific ID?', name: 'Prolific_ID'}]
+// Likert scale labels
+let likert_ethnicity = ["migrant", "", "", "", "", "", "niet migrant"];
+let likert_gender    = ["man", "", "", "", "", "", "vrouw"];
+let likert_age       = ["jong", "", "", "", "", "", "oud"];
+let likert_location  = ["randstad", "", "", "", "", "", "niet randstad"];
+let likert_class     = ["hoge sociale klasse", "", "", "", "", "", "lage sociale klasse"];
+let likert_rating    = ["positief", "", "", "", "", "", "negatief"]
+
+// Randomize likert scales
+function randomizelabel(labels) {
+  if (Math.random() < 0.5) {
+    return labels.slice().reverse();
+  }
+  return labels.slice();
 }
 
-// Likert scale labels
-let likert_scale = [
-  "Helemaal mee oneens",
-  "Oneens",
-  "Beetje oneens",
-  "Neutraal",
-  "Beetje mee eens",
-  "Mee eens",
-  "Helemaal mee eens"
-];
+const straattaal_woorden = "doekoe, waggie, osso, fittie, patta, pokoe"
+const nederlands_woorden = "auto, ruzie, liedje, schoen, geld, huis"
 
-//Statements
-let statements = {
-  type: jsPsychSurveyLikert,
-  questions: [
-    {prompt: "Straattaal wordt vooral gesproken door mensen met een migratieachtergrond.", name: 'Vraag 1', labels: likert_scale},
-    {prompt: "Jongens gebruiken vaker straattaal dan meisjes.", name: 'Vraag2', labels: likert_scale},
-    {prompt: "Straattaal wordt vooral gesproken door mensen uit lagere sociale klassen.", name: 'Vraag3', labels: likert_scale},
-    {prompt: "Mensen met geen migratieachtergrond gebruiken zelden Straattaal.", name: 'Vraag4', labels: likert_scale}
-  ],
-  randomize_question_order: true
+function createSurveyBlock(languageLabel, example_words) {
+  return {
+    type: jsPsychSurveyLikert,
+    preamble: ` 
+      ${info_style_UU}
+      <div style="max-width: 800px; margin: 0 auto; font-size:18px;">
+        <p><b>In hoeverre associeert u de volgende kenmerken met ${languageLabel} (woorden zoals: ${example_words}) en sprekers hiervan?</b></p>
+        <p><i>Selecteer een bolletje: hoe dichter u bij een van de kenmerken kiest, sterker u dat kenmerk associeert met <b>${languageLabel}</b>.</i></p>
+      </div>`,
+    questions: [
+      {prompt: `Welke achtergrond associeert u met sprekers van <b>${languageLabel}</b>?`, name: `Ethnicity_${languageLabel}`, labels: randomizelabel(likert_ethnicity)},
+      {prompt: `Welke geslacht associeert u met sprekers van <b>${languageLabel}</b>?`, name: `Gender_${languageLabel}`, labels: randomizelabel(likert_gender)},
+      {prompt: `Welke leeftijd associeert u met sprekers van <b>${languageLabel}</b>?`, name: `Age_${languageLabel}`, labels: randomizelabel(likert_age)},
+      {prompt: `Welke woonplek associeert u met sprekers van <b>${languageLabel}</b>?`, name: `Location_${languageLabel}`, labels: randomizelabel(likert_location)},
+      {prompt: `Welke sociale klasse associeert u met sprekers van <b>${languageLabel}</b>?`, name: `Class_${languageLabel}`, labels: randomizelabel(likert_class)},
+      {prompt: `Hoe staat u tegenover het gebruik van <b>${languageLabel}</b>?`, name: `Rating_${languageLabel}`, labels: randomizelabel(likert_rating)}
+    ],
+    randomize_question_order: true
+  };
+}
+
+let expl_questionnaire = {
+  timeline: [createSurveyBlock("STRAATTAAL", straattaal_woorden), createSurveyBlock("STANDAARD NEDERLANDS", nederlands_woorden)]
+    .sort(() => Math.random() - 0.5)
 };
 
-
-//Demographics
-// Demographics - styled similar to Qualtrics layout
-let demographics = {
+let demographicsPage1 = {
   type: jsPsychSurveyHtmlForm,
   preamble: `
-    <style>
-      body {
-        background: rgb(246, 246, 246);
-        font-family: "Open Sans", "Frutiger", Helvetica, Arial, sans-serif;
-        color: rgb(33, 37, 41);
-        text-align: left;
-      }
-
-      .demographics-container {
-        max-width: 850px;
-        margin: 40px auto;
-        background: white;
-        padding: 40px 50px;
-        border-radius: 6px;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      }
-
-      .demographics-container h2 {
-        font-size: 1.8rem;
-        border-bottom: 2px solid #ffcd00;
-        padding-bottom: 10px;
-        margin-bottom: 25px;
-      }
-
-      .form-row {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        margin-bottom: 20px;
-      }
-
-      .form-group {
-        flex: 1;
-        min-width: 250px;
-        margin-right: 20px;
-      }
-
-      .form-group:last-child {
-        margin-right: 0;
-      }
-
-      label {
-        display: block;
-        font-weight: 600;
-        margin-bottom: 6px;
-      }
-
-      input[type="text"],
-      input[type="number"],
-      select,
-      textarea {
-        width: 100%;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        padding: 8px 10px;
-        font-size: 15px;
-        box-sizing: border-box;
-        background: #fff;
-      }
-
-      textarea {
-        resize: vertical;
-      }
-
-      .hidden {
-        display: none;
-      }
-
-      .jspsych-survey-html-form-next {
-        background: #000;
-        color: #fff;
-        border: none;
-        font-weight: bold;
-        font-size: 15px;
-        padding: 12px 30px;
-        cursor: pointer;
-        border-radius: 4px;
-        margin-top: 25px;
-        display: block;
-        margin-left: auto;
-      }
-
-      .jspsych-survey-html-form-next:hover {
-        background: #222;
-      }
-
-      small {
-        color: #666;
-        display: block;
-        margin-top: 15px;
-      }
-    </style>
-
-    <div class="demographics-container">
-      <h2>Vragen over uzelf</h2>
+    ${info_style_UU}
+    <div style="max-width: 800px; margin: 5px auto; font-size: 18px;">
+      <h3 style="margin-bottom: 10px;">Vul onderstaande vragen over uzelf in:</h3>
+    </div>
   `,
   html: `
-    <div class="form-row">
-      <div class="form-group">
-        <label for="age">Leeftijd:</label>
-        <input type="number" id="age" name="age" min="16" max="120" required>
-      </div>
-      <div class="form-group">
-        <label for="gender">Geslacht:</label>
-        <select id="gender" name="gender" required>
-          <option value="">-- Selecteer --</option>
-          <option value="Man">Man</option>
-          <option value="Vrouw">Vrouw</option>
-          <option value="Anders">Anders</option>
-          <option value="Wil niet zeggen">Wil niet zeggen</option>
-        </select>
-      </div>
+    ${info_style_UU}
+    <div style="margin-bottom: 30px;">
+      <label for="age"><strong>Leeftijd:</strong></label>
+      <input type="number" id="age" name="age" min="16" max="120" required style="width: 100%; padding: 8px;">
     </div>
 
-    <div class="form-row">
-      <div class="form-group">
-        <label for="education">Opleidingsniveau:</label>
-        <select id="education" name="education" required>
-          <option value="">-- Selecteer --</option>
-          <option value="Basisonderwijs">Basisonderwijs</option>
-          <option value="Middelbaar onderwijs">Middelbaar onderwijs</option>
-          <option value="MBO">MBO</option>
-          <option value="HBO">HBO</option>
-          <option value="WO">WO</option>
-          <option value="Anders">Anders</option>
-        </select>
-      </div>
+    <div style="margin-bottom: 30px;">
+      <label for="gender"><strong>Geslacht:</strong></label>
+      <select id="gender" name="gender" required style="width: 100%; padding: 8px;">
+        <option value="">-- Selecteer --</option>
+        <option value="Man">Man</option>
+        <option value="Vrouw">Vrouw</option>
+        <option value="Non-binair">Non-binair</option>
+        <option value="Anders">Anders</option>
+        <option value="Wil niet zeggen">Wil niet zeggen</option>
+      </select>
     </div>
 
-    <div class="form-row">
-      <div class="form-group">
-        <label for="born_nl">Bent u in Nederland geboren?</label>
-        <select id="born_nl" name="born_nl" required onchange="document.getElementById('born_nl_text').classList.toggle('hidden', this.value!='Nee');">
-          <option value="">-- Selecteer --</option>
-          <option value="Ja">Ja</option>
-          <option value="Nee">Nee</option>
-        </select>
-      </div>
-      <div class="form-group hidden" id="born_nl_text">
-        <label for="born_nl_other">Waar bent u geboren?</label>
-        <input type="text" id="born_nl_other" name="born_nl_other">
-      </div>
+    <div style="margin-bottom: 30px;">
+      <label for="education"><strong>Opleidingsniveau:</strong></label>
+      <select id="education" name="education" required style="width: 100%; padding: 8px;">
+        <option value="">-- Selecteer --</option>
+        <option value="Basisonderwijs">Basisonderwijs</option>
+        <option value="Middelbaar onderwijs">Middelbaar onderwijs</option>
+        <option value="MBO">MBO</option>
+        <option value="HBO">HBO</option>
+        <option value="WO">WO</option>
+        <option value="Anders">Anders</option>
+      </select>
     </div>
 
-    <div class="form-row">
-      <div class="form-group">
-        <label for="parents_nl">Zijn uw ouders in Nederland geboren?</label>
-        <select id="parents_nl" name="parents_nl" required onchange="document.getElementById('parents_nl_text').classList.toggle('hidden', this.value!='Nee');">
-          <option value="">-- Selecteer --</option>
-          <option value="Ja">Ja</option>
-          <option value="Nee">Nee</option>
-        </select>
-      </div>
-      <div class="form-group hidden" id="parents_nl_text">
-        <label for="parents_nl_other">Waar zijn uw ouders geboren?</label>
-        <input type="text" id="parents_nl_other" name="parents_nl_other">
-      </div>
+    <div style="margin-bottom: 30px;">
+      <label for="randstad"><strong>Woont u in de Randstad?</strong></label>
+      <select id="randstad" name="randstad" required onchange="document.getElementById('randstad_text').style.display = this.value === 'Ik twijfel' ? 'block' : 'none';" style="width: 100%; padding: 8px;">
+        <option value="">-- Selecteer --</option>
+        <option value="Ja">Ja</option>
+        <option value="Nee">Nee</option>
+        <option value="Ik twijfel">Ik twijfel</option>
+      </select>
     </div>
 
-    <div class="form-row">
-      <div class="form-group" style="flex: 1;">
-        <label for="languages">Gesproken moedertalen:</label>
-        <textarea id="languages" name="languages" rows="3" placeholder="Bijv. Nederlands, Engels"></textarea>
-      </div>
-    </div>
-
-    <small>Velden met * zijn verplicht.</small>
+    <div id="randstad_text" style="display: none; margin-bottom: 30px;">
+      <label for="randstad_other"><strong>Waar woont u?</strong></label>
+      <input type="text" id="randstad_other" name="randstad_other" style="width: 100%; padding: 8px;">
     </div>
   `,
   button_label: "Volgende"
+};
+
+let demographicsPage2 = {
+  type: jsPsychSurveyHtmlForm,
+  preamble: `
+    ${info_style_UU}
+    <div style="max-width: 800px; margin: 5px auto; font-size: 18px;">
+      <h3 style="margin-bottom: 10px;">Vul onderstaande vragen over uzelf in:</h3>
+    </div>
+  `,
+  html: `
+    ${info_style_UU}
+    <div style="margin-bottom: 30px;">
+      <label for="born_nl"><strong>Bent u in Nederland geboren?</strong></label>
+      <select id="born_nl" name="born_nl" required onchange="document.getElementById('born_nl_text').style.display = this.value === 'Nee' ? 'block' : 'none';" style="width: 100%; padding: 8px;">
+        <option value="">-- Selecteer --</option>
+        <option value="Ja">Ja</option>
+        <option value="Nee">Nee</option>
+      </select>
+    </div>
+    <div id="born_nl_text" style="display: none; margin-bottom: 30px;">
+      <label for="born_nl_other"><strong>Waar bent u geboren?</strong></label>
+      <input type="text" id="born_nl_other" name="born_nl_other" style="width: 100%; padding: 8px;">
+    </div>
+
+    <div style="margin-bottom: 30px;">
+      <label for="parents_nl"><strong>Zijn uw ouders in Nederland geboren?</strong></label>
+      <select id="parents_nl" name="parents_nl" required onchange="document.getElementById('parents_nl_text').style.display = this.value === 'Nee' ? 'block' : 'none';" style="width: 100%; padding: 8px;">
+        <option value="">-- Selecteer --</option>
+        <option value="Ja">Ja</option>
+        <option value="Nee">Nee</option>
+      </select>
+    </div>
+    <div id="parents_nl_text" style="display: none; margin-bottom: 30px;">
+      <label for="parents_nl_other"><strong>Waar zijn uw ouders geboren?</strong></label>
+      <input type="text" id="parents_nl_other" name="parents_nl_other" style="width: 100%; padding: 8px;">
+    </div>
+
+    <div style="max-width: 700px; margin: 30px auto; font-size: 18px; text-align: center;">
+      <label><strong>Gebruikt u Straattaal?</strong></label>
+      <div style="display: flex; justify-content: center; gap: 30px; margin-top: 15px;">
+        <label>
+          <input type="radio" name="Straattaalspreker" value="Ja" required>
+          Ja
+        </label>
+        <label>
+          <input type="radio" name="Straattaalspreker" value="Nee">
+          Nee
+        </label>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 30px;">
+      <label for="languages"><strong>Gesproken moedertalen:</strong></label>
+      <textarea id="languages" name="languages" rows="3" placeholder="Bijv. Nederlands, Engels" style="width: 100%; padding: 8px;"></textarea>
+    </div>
+  `,
+  button_label: "Voltooien"
 };

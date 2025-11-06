@@ -1,139 +1,90 @@
 // --- MAIN ---
+// File creates and stars jspsych timeline
 
-function main() {
 let jsPsych = initJsPsych({
   on_finish: function() { jsPsych.data.displayData(); }
 });
 
-function assignStimulusKeys(stimuli, keyConfiguration) {
-  return stimuli.map(s => ({
-    stimulus: s.stimulus,
-    stim_key_association: keyConfiguration[s.category]
-  }));
-}
+// Information letter and consent procedure
+let consent_procedure = {
+    timeline: [info_pages, consent_page, if_node_consent]
+};
 
-// RANDOMIZATION
-// Randomize key configuration language varieties
-function randomkeyConfiguration(...categories) {
-  return Math.random() < 0.5
-    ? { [categories[0]]: 'left', [categories[1]]: 'right' }
-    : { [categories[0]]: 'right', [categories[1]]: 'left' };
-}
-
-// Reverse a category mapping
-function reversekeyConfiguration(keyConfiguration) {
-  return Object.fromEntries(
-    Object.entries(keyConfiguration).map(([k,v]) => [k, v === 'left' ? 'right' : 'left'])
-  );
-}
-
-// Set key configurations for all blocks
-let keyConfigurationBlock1 = randomkeyConfiguration('STANDAARD NEDERLANDS', 'STRAATTAAL');
-let keyConfigurationBlock2 = randomkeyConfiguration('NIET MIGRANT', 'MIGRANT');
-let keyConfigurationBlock3 = {...keyConfigurationBlock1, ...keyConfigurationBlock2};
-let keyConfigurationBlock4 = reversekeyConfiguration(keyConfigurationBlock2);
-let keyConfigurationBlock5 = {...keyConfigurationBlock1, ...keyConfigurationBlock4};
-
-
-// Create fixation cross with labels present
-function createFixationTrial (leftLabels, rightLabels, duration=250) {
-  return {
-    type: jsPsychIatHtml,
-    stimulus: '<div class="stimulus">+</div>',
-    force_correct_key_press: false,
-    trial_duration: duration, 
-    left_category_key: 'f',
-    right_category_key: 'j',
-    left_category_label: leftLabels,
-    right_category_label: rightLabels,
-    response_ends_trial: false}
-  }
-function createIATTrials(stimuli, leftLabels, rightLabels, fixationDuration=500) {
-  return {
-    timeline: [
-      createFixationTrial(leftLabels, rightLabels, fixationDuration),
-      {
-        type: jsPsychIatHtml,
-        stimulus: function() {
-          return `<div class="stimulus">${jsPsych.timelineVariable('stimulus')}</div>`;
-        },
-        stim_key_association: function() { 
-          return jsPsych.timelineVariable('stim_key_association');
-        },
-        html_when_wrong: '<span style="color:red;font-size:80px">X</span>',
-        bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the other key to continue</p>',
-        force_correct_key_press: true,
-        display_feedback: true,
-        trial_duration: 3000,
-        left_category_key: 'f',
-        right_category_key: 'j',
-        left_category_label: leftLabels,
-        right_category_label: rightLabels,
-        response_ends_trial: true
-      }
-    ],
-    timeline_variables: stimuli,
-    randomize_order: true
-  };
-}
-
-
-function instructionIAT (keyConfiguration){
-  return {
-    type: jsPsychHtmlKeyboardResponse,
-    stimulus: function() {
-      let leftCats = Object.keys(keyConfiguration).filter(k => keyConfiguration[k] == 'left');
-      let rightCats = Object.keys(keyConfiguration).filter(k => keyConfiguration[k] == 'right');
-
-      return `
-      <div style="text-align:center; font-size:22px;">
-        <p>In dit deel van het experiment ziet u steeds een naam of woord in het midden van het scherm.</p>
-        <p>Uw taak is om dit woord zo snel en zo correct mogelijk in te delen in de juiste categorie.</p>
-        <br>
-        <p><b>Druk op (f)</span> voor  ${leftCats.join(" + ")}</b></p>
-        <p><b>Druk op (j)</span> voor  ${rightCats.join(" + ")}</b></p>
-        <br>
-        <p style="margin-top:40px;">Druk op de <b>spatiebalk</b> om te beginnen.</p>
-      </div>
-    `;
-  },
-  choices: [' ']
-  };
-}
-
-function createIATBlock(keyConfiguration, stimuli){
-  return {
-    timeline: [
-    instructionIAT(keyConfiguration),
-    createIATTrials(
-      assignStimulusKeys(stimuli, keyConfiguration),
-      Object.keys(keyConfiguration).filter(k => keyConfiguration[k] == 'left'),
-      Object.keys(keyConfiguration).filter(k => keyConfiguration[k] == 'right')
-    )
+// Record Prolific ID
+let prolific_ID = {
+  type: jsPsychSurveyText,
+  preamble: info_style_UU + "",
+  questions: [
+    {
+      prompt: "Wat is uw Prolific ID?",
+      name: "Prolific_ID",
+      required: true
+    }
   ]
+};
+
+var environment_check = {
+  type: jsPsychHtmlButtonResponse,
+  stimulus: info_style_UU + environment_text,
+  choices: ['Verder'],
+  button_html: '<button class="jspsych-btn" disabled>%choice%</button>', // only allow continueing when all boxess are checked
+  on_load: function() {
+    const checkboxes = document.querySelectorAll('.check-item');
+    const button = document.querySelector('.jspsych-btn');
+
+    checkboxes.forEach(box => {
+      box.addEventListener('change', () => {
+        // activeer de knop alleen als alle vakjes zijn aangevinkt
+        const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+        button.disabled = !allChecked;
+      });
+    });
   }
-}
+};
 
-//TRIAL BLOCKS
-// 1: Straattaal vs. Standaard Nederlands
-let block1 = createIATBlock(keyConfigurationBlock1, ned_strttl_stimuli)
-let block2 = createIATBlock(keyConfigurationBlock2, ned_mig_stimuli)
-let block3 = createIATBlock(keyConfigurationBlock3, ned_strttl_stimuli.concat(ned_mig_stimuli))
-let block4 = createIATBlock(keyConfigurationBlock4, ned_mig_stimuli)
-let block5 = createIATBlock(keyConfigurationBlock5, ned_strttl_stimuli.concat(ned_mig_stimuli))
+let general_iat_instruction = {
+  type: jsPsychHtmlButtonResponse,
+  stimulus: info_style_UU + iat_instructions,
+  choices: ["Volgende"]
+};
 
-let IAT = {timeline:[block1, block2, block3, block4, block5]};
+let combined_stimuli = alternateStimuli(stim_var_a, stim_var_b, stim_name_a, stim_name_b, keyConfigurationBlock3)
 
+// Trial blocks of full IAT
+let block1 = createIATBlock(keyConfigurationBlock1, ned_strttl_stimuli, true,  1)
+let block2 = createIATBlock(keyConfigurationBlock2, ned_mig_stimuli,    true,  2)
+let block3 = createIATBlock(keyConfigurationBlock3, combined_stimuli,   true,  3)
+let block4 = createIATBlock(keyConfigurationBlock3, combined_stimuli,   false, 3)
+let block5 = createIATBlock(keyConfigurationBlock4, ned_mig_stimuli,    true,  4)
+let block6 = createIATBlock(keyConfigurationBlock5, combined_stimuli,   true,  5)
+let block7 = createIATBlock(keyConfigurationBlock5, combined_stimuli,   false, 5)
+let IAT = {timeline:[block1, block2, block3, block4, block5, block6, block7]}; 
+
+//Question about being disturbed in the experiment
+let disturbed = {
+  type: jsPsychSurveyText,
+  preamble: info_style_UU + "",
+  questions: [
+    {
+      prompt: "Werd u tijdens het experiment afgeleid?<br>(bijv. door iemand die binnenkwam of een telefoon die afging)",
+      name: "disturbed",
+      required: true,
+      rows: 5,       
+      columns: 60 
+    }
+  ]
+};
 
 //End screen and redirection to Prolific
 let end_screen = {
   type: jsPsychHtmlButtonResponse,
-  stimulus: end_experiment,
+  stimulus: info_style_UU + end_experiment,
   choices: ["Sluiten"],
   on_finish: function() {window.location.href = "https://google.com";}
 };
 
-// Timeline of the full experiment
-let timeline = [consent_procedure, prolific_ID, IAT, statements, demographics, end_screen];
-jsPsych.run(timeline);
-}
+// Create timeline and run it
+function main() {
+  let timeline = [consent_procedure, prolific_ID, environment_check, general_iat_instruction, IAT, expl_questionnaire, disturbed, demographicsPage1, demographicsPage2, end_screen];
+  jsPsych.run(timeline);
+};
