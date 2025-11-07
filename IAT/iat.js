@@ -1,17 +1,20 @@
+// --- IAT---
+
+// Assign the correct key to each stimulus
 function assignStimulusKeys(stimuli, keyConfiguration) {
   return stimuli.map(s => ({
     ...s,
     stim_key_association: keyConfiguration[s.category]
   }));
 }
+
 // COUNTERBALANCING
 function getKeyConfigurationForGroup(groupName) {
   return COUNTERBALANCED_MAPPINGS[groupName];
 }
 
-
 // RANDOMIZATION
-// Randomize key configuration language varieties
+// Randomize key configuration language varieties (TO DO delete when counterbalancing is fully working and checked)
 function randomkeyConfiguration(...categories) {
   return Math.random() < 0.5
     ? { [categories[0]]: 'left', [categories[1]]: 'right' }
@@ -25,15 +28,16 @@ function reversekeyConfiguration(keyConfiguration) {
   );
 }
 
+// Returns the key mappings based on the counterbalanced conditions
 function setup_key_configuration(groupName) {
   const keyConfig = getKeyConfigurationForGroup(groupName);
 
   const keyConfigurationBlock1 = {
-    'STANDAARD NEDERLANDS': keyConfig['STANDAARD NEDERLANDS'],
-    'STRAATTAAL': keyConfig['STRAATTAAL']};
+    label_target_A: keyConfig[label_target_A],
+    label_target_B: keyConfig[label_target_B]};
   const keyConfigurationBlock2 = {
-    'NIET MIGRANT': keyConfig['NIET MIGRANT'],
-    'MIGRANT': keyConfig['MIGRANT']};
+    label_attribute_B: keyConfig[label_attribute_B],
+    label_attribute_A: keyConfig[label_attribute_A]};
   const keyConfigurationBlock3 = { ...keyConfigurationBlock1, ...keyConfigurationBlock2 };
   const keyConfigurationBlock4 = reversekeyConfiguration(keyConfigurationBlock2);
   const keyConfigurationBlock5 = { ...keyConfigurationBlock1, ...keyConfigurationBlock4 };
@@ -47,7 +51,7 @@ function setup_key_configuration(groupName) {
   };
 }
 
-// Set key configurations for all blocks (randomised version)
+// Set key configurations for all blocks (randomised version) (if using replace with label_??)
 //let keyConfigurationBlock1 = randomkeyConfiguration('STANDAARD NEDERLANDS', 'STRAATTAAL');
 //let keyConfigurationBlock2 = randomkeyConfiguration('NIET MIGRANT', 'MIGRANT');
 //let keyConfigurationBlock3 = {...keyConfigurationBlock1, ...keyConfigurationBlock2};
@@ -109,6 +113,7 @@ function colorLabels(labelsArray) {
   });
 }
 
+// Create all trials for the IAT
 function createIATTrials(stimuli, leftLabels, rightLabels, fixationDuration = 500) {
 
   return {
@@ -140,6 +145,7 @@ function createIATTrials(stimuli, leftLabels, rightLabels, fixationDuration = 50
   };
 }
 
+// Create instruction screen for every IAT block
 function instructionIAT(keyConfiguration, block_nr) {
   return {
     type: jsPsychHtmlKeyboardResponse,
@@ -150,7 +156,6 @@ function instructionIAT(keyConfiguration, block_nr) {
       return `
         <div style="position: relative; font-size: 18px; width: 900px; margin: auto; padding: 20px;">
 
-          <!-- Top category labels -->
           <div style="display: flex; justify-content: center; gap: 400px; font-size: 18px; line-height: 1; margin-top: 80px;">
             <div style="text-align:center;">
               <p>Druk 'f' voor:</p>
@@ -164,24 +169,21 @@ function instructionIAT(keyConfiguration, block_nr) {
 
           <br><br>
 
-          <!-- Part number -->
           <div style="text-align: center; font-size: 18px;">
             <u>Deel ${block_nr} van 5</u>
           </div>
 
           <br>
 
-          <!-- Instructions -->
           <div style="font-size: 18px; line-height: 1;">
-            <p>Houd uw linkervinger bij de <b>f</b>-toets voor items die behoren tot de categorie ${colorLabels(leftCats).join(" + ")}.</p>
-            <p>Houd uw rechtervinger bij de <b>j</b>-toets voor items die behoren tot de categorie ${colorLabels(rightCats).join(" + ")}. De items verschijnen één voor één.</p>
+            <p>Druk met uw linkervinger op de <b>f</b>-toets voor items die behoren tot de categorie ${colorLabels(leftCats).join(" + ")}.</p>
+            <p>Druk met uw rechtervinger op de <b>j</b>-toets voor items die behoren tot de categorie ${colorLabels(rightCats).join(" + ")}. De items verschijnen één voor één.</p>
             <p>Als u een fout maakt, verschijnt er een rood <span style="color:red; font-weight:bold;">X</span>. Druk dan op de andere toets om verder te gaan.</p>
             <p><u>Probeer steeds zo snel mogelijk te antwoorden</u> terwijl u nauwkeurig blijft.</p>
           </div>
 
           <br><br>
 
-          <!-- Spacebar prompt -->
           <div style="text-align: center; font-size: 20px;">
             Druk op de <b>spatiebalk</b> wanneer u klaar bent om te beginnen.
           </div>
@@ -194,29 +196,7 @@ function instructionIAT(keyConfiguration, block_nr) {
   };
 }
 
-function instructionIAT1 (keyConfiguration){
-  return {
-    type: jsPsychHtmlKeyboardResponse,
-    stimulus: function() {
-      let leftCats = Object.keys(keyConfiguration).filter(k => keyConfiguration[k] == 'left');
-      let rightCats = Object.keys(keyConfiguration).filter(k => keyConfiguration[k] == 'right');
-
-      return `
-      <div style="text-align:center; font-size:22px;">
-        <p>In dit deel van het experiment ziet u steeds een naam of woord in het midden van het scherm.</p>
-        <p>Uw taak is om dit woord zo snel en zo correct mogelijk in te delen in de juiste categorie.</p>
-        <br>
-        <p><b>Druk op (${LEFT_KEY})</span> voor  ${colorLabels(leftCats).join(" + ")}</b></p>
-        <p><b>Druk op (${RIGHT_KEY})</span> voor  ${colorLabels(rightCats).join(" + ")}</b></p>
-        <br>
-        <p style="margin-top:40px;">Druk op de <b>spatiebalk</b> om te beginnen.</p>
-      </div>
-    `;
-  },
-  choices: [' ']
-  };
-}
-
+// Create a full IAT block including instruction if desired
 function createIATBlock(keyConfiguration, stimuli, instructions, block_number) {
 
   const timeline = [];

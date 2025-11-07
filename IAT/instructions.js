@@ -1,5 +1,6 @@
 // --- INSTRUCTIONS ---
 
+// Part 1 of the information letter
 const information_letter_1 =
     `<div class = "instruction">
       <img src="https://www.uu.nl/sites/default/files/styles/original_image/public/uu-logo-en-geenwitruimte.png" 
@@ -23,6 +24,7 @@ const information_letter_1 =
       of uw deelname te beëindigen, zonder opgaaf van reden en zonder nadelige gevolgen.</p>
     </div>`
 
+// Part 2 of the information letter    
 const information_letter_2 = 
     `<div class = "instruction">
       <img src="https://www.uu.nl/sites/default/files/styles/original_image/public/uu-logo-en-geenwitruimte.png" 
@@ -52,6 +54,7 @@ const information_letter_2 =
       <a href="mailto:privacy-beta@uu.nl">privacy-beta@uu.nl</a>.</p>
     </div>`
 
+// Informed consent checklist
 const consent_text = 
     `<div class="instruction">
       <img src="https://www.uu.nl/sites/default/files/styles/original_image/public/uu-logo-en-geenwitruimte.png" 
@@ -69,11 +72,13 @@ const consent_text =
       </ul>
     </div>`
 
+// Text to print when no consent is given    
 const no_consent = 
     `<div class = "instruction center-text">
       <p>Omdat u niet wilt deelnemen aan dit onderzoek, vragen wij u deze vragenlijst te sluiten en uw inzending op Prolific af te ronden door op de knop <strong>‘Stoppen zonder te voltooien’</strong> te klikken.</p>
     </div>`
 
+// General instruction of the IAT    
 const iat_instructions = 
     `<div style="max-width:900px; margin:auto; font-family:sans-serif; text-align:left;">
       <p style="font-size:1.2rem;">
@@ -109,10 +114,12 @@ const iat_instructions =
       </table>
 
       <p style="font-size:1.1rem;">
-        Dit experiment bestaat uit vijf kleinere delen. De instructies veranderen voor ieder deel. <b>Dus let goed op!</b>
+        Dit experiment bestaat uit vijf onderdelen. De instructies veranderen voor ieder deel. <b>Dus let goed op!</b>
       </p>
     </div>
   `
+
+// Environment checklist
 const environment_text = `
 <div style="max-width: 700px; margin: 0 auto; text-align: left; line-height: 1.6;">
   <p><strong>Om ervoor te zorgen dat de resultaten van dit experiment zo nauwkeurig mogelijk zijn, vragen wij u het volgende te doen:</strong></p>
@@ -133,6 +140,8 @@ const environment_text = `
     <br>
   </div>
   `
+
+// Text when experiment has ended
 const end_experiment = 
     `<div class = "instruction center-text">
       <h3>Bedankt voor uw deelname!</h3>

@@ -7,12 +7,14 @@
 // Replace this by a PERFECT COPY of the key from the data server.
 const ACCESS_KEY = '00000000-0000-0000-0000-000000000000';
 
-// amount of repitions of each sitmulus in each block
+// Amount of repitions of each sitmulus in each block
 const REP_VAR = 4;
 const REP_NAME = 3;
 
+// Keys used as left and right button
 const LEFT_KEY = 'f';
 const RIGHT_KEY = 'j';
 
+// Colors used for the target and attribute stimuli
 const COLOR_TARGET = 'black';
 const COLOR_ATTRIBUTE = 'blue';

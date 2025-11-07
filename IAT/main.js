@@ -23,6 +23,7 @@ let prolific_ID = {
   ]
 };
 
+// Check for the test environment
 var environment_check = {
   type: jsPsychHtmlButtonResponse,
   stimulus: info_style_UU + environment_text,
@@ -34,7 +35,6 @@ var environment_check = {
 
     checkboxes.forEach(box => {
       box.addEventListener('change', () => {
-        // activeer de knop alleen als alle vakjes zijn aangevinkt
         const allChecked = Array.from(checkboxes).every(cb => cb.checked);
         button.disabled = !allChecked;
       });
@@ -42,30 +42,29 @@ var environment_check = {
   }
 };
 
+// Discussion of the general IAT including the different stimuli and their categorisation
 let general_iat_instruction = {
   type: jsPsychHtmlButtonResponse,
   stimulus: info_style_UU + iat_instructions,
   choices: ["Volgende"]
 };
 
+// Create full timeline of all IAT blocks
 function createFullIAT (cb_keys){
-// Trial blocks of full IAT
-  let block1 = createIATBlock(cb_keys.keyConfigurationBlock1, ned_strttl_stimuli, true, 1)
-  let block2 = createIATBlock(cb_keys.keyConfigurationBlock2, ned_mig_stimuli, true, 2)
+  let block1 = createIATBlock(cb_keys.keyConfigurationBlock1, target_stimuli, true, 1)
+  let block2 = createIATBlock(cb_keys.keyConfigurationBlock2, attribute_stimuli, true, 2)
   let block3 = createIATBlock(cb_keys.keyConfigurationBlock3, alternateStimuli(stim_var_a, stim_var_b, stim_name_a, stim_name_b, cb_keys.keyConfigurationBlock3), true, 3)
   let block4 = createIATBlock(cb_keys.keyConfigurationBlock3, alternateStimuli(stim_var_a, stim_var_b, stim_name_a, stim_name_b, cb_keys.keyConfigurationBlock3), false, 3)
-  let block5 = createIATBlock(cb_keys.keyConfigurationBlock4, ned_mig_stimuli, true, 4)
+  let block5 = createIATBlock(cb_keys.keyConfigurationBlock4, attribute_stimuli, true, 4)
   let block6 = createIATBlock(cb_keys.keyConfigurationBlock5, alternateStimuli(stim_var_a, stim_var_b, stim_name_a, stim_name_b, cb_keys.keyConfigurationBlock5), true, 5)
   let block7 = createIATBlock(cb_keys.keyConfigurationBlock5, alternateStimuli(stim_var_a, stim_var_b, stim_name_a, stim_name_b, cb_keys.keyConfigurationBlock5), false, 5)
 
   const blocks = [block1, block2, block3, block4, block5, block6, block7].map(b => b || []);
-
   return { timeline: blocks.flat() };
-
 }
 
 //Question about being disturbed in the experiment
-let disturbed = {
+let disturbed_question = {
   type: jsPsychSurveyText,
   preamble: info_style_UU + "",
   questions: [
@@ -79,7 +78,11 @@ let disturbed = {
   ]
 };
 
-//End screen and redirection to Prolific
+let demographics = {
+  timeline : [demographics_1, demographics_2]
+};
+
+//End screen and redirection to Prolific (TODO: redirect to prolific site)
 let end_screen = {
   type: jsPsychHtmlButtonResponse,
   stimulus: info_style_UU + end_experiment,
@@ -92,6 +95,7 @@ function main() {
   uil.setAccessKey(ACCESS_KEY);
   uil.stopIfExperimentClosed();
 
+  // way to test (TODO: remove when experiment is hosted)
   const group_name = "group1";
 
   // Set key configuration based on counterbalanced group assignment
@@ -100,7 +104,8 @@ function main() {
     const cb_keys = setup_key_configuration(group_name);
     let IAT = createFullIAT(cb_keys);
 
-    let timeline = [consent_procedure, prolific_ID, environment_check, general_iat_instruction, IAT, expl_questionnaire, disturbed, demographicsPage1, demographicsPage2, end_screen];
+    let timeline = [consent_procedure, prolific_ID, environment_check, general_iat_instruction, 
+                    IAT, expl_questionnaire, disturbed_question, demographics, end_screen];
     
     jsPsych.run(timeline);
   //});

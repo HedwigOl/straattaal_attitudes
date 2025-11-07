@@ -19,6 +19,7 @@ function randomizelabel(labels) {
 const straattaal_woorden = "doekoe, waggie, osso, fittie, patta, pokoe"
 const nederlands_woorden = "auto, ruzie, liedje, schoen, geld, huis"
 
+// Create explicit questionnaire
 function createSurveyBlock(languageLabel, example_words) {
   return {
     type: jsPsychSurveyLikert,
@@ -40,12 +41,14 @@ function createSurveyBlock(languageLabel, example_words) {
   };
 }
 
+// Create timeline for explicit questionnaire with randomized order of pages
 let expl_questionnaire = {
   timeline: [createSurveyBlock("STRAATTAAL", straattaal_woorden), createSurveyBlock("STANDAARD NEDERLANDS", nederlands_woorden)]
     .sort(() => Math.random() - 0.5)
 };
 
-let demographicsPage1 = {
+// Demographics page 1
+let demographics_1 = {
   type: jsPsychSurveyHtmlForm,
   preamble: `
     ${info_style_UU}
@@ -103,7 +106,8 @@ let demographicsPage1 = {
   button_label: "Volgende"
 };
 
-let demographicsPage2 = {
+// Demograpics page 2
+let demographics_2 = {
   type: jsPsychSurveyHtmlForm,
   preamble: `
     ${info_style_UU}
