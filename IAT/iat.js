@@ -33,14 +33,15 @@ function setup_key_configuration(groupName) {
   const keyConfig = getKeyConfigurationForGroup(groupName);
 
   const keyConfigurationBlock1 = {
-    label_target_A: keyConfig[label_target_A],
-    label_target_B: keyConfig[label_target_B]};
+    'STANDAARD NEDERLANDS': keyConfig['STANDAARD NEDERLANDS'],
+    'STRAATTAAL': keyConfig['STRAATTAAL']};
   const keyConfigurationBlock2 = {
-    label_attribute_B: keyConfig[label_attribute_B],
-    label_attribute_A: keyConfig[label_attribute_A]};
+    'NIET MIGRANT': keyConfig['NIET MIGRANT'],
+    'MIGRANT': keyConfig['MIGRANT']};
   const keyConfigurationBlock3 = { ...keyConfigurationBlock1, ...keyConfigurationBlock2 };
   const keyConfigurationBlock4 = reversekeyConfiguration(keyConfigurationBlock2);
   const keyConfigurationBlock5 = { ...keyConfigurationBlock1, ...keyConfigurationBlock4 };
+
 
   return {
     keyConfigurationBlock1,
@@ -95,7 +96,7 @@ function alternateStimuli(targets_A, targets_B, attributes_A, attributes_B) {
 function createFixationTrial (leftLabels, rightLabels, duration=250) {
   return {
     type: jsPsychIatHtml,
-    stimulus: '<div class="stimulus">+</div>',
+    stimulus: '<div class="stimulus"></div>',
     stim_key_association: ' ',
     force_correct_key_press: false,
     trial_duration: duration, 
