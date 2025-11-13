@@ -52,10 +52,10 @@ let general_iat_instruction = {
 // Create full timeline of all IAT blocks
 function createFullIAT (cb_keys){
   let block1 = createIATBlock(cb_keys.keyConfigurationBlock1, target_stimuli, true, 1)
-  let block2 = createIATBlock(cb_keys.keyConfigurationBlock2, attribute_stimuli, true, 2)
+  let block2 = createIATBlock(cb_keys.keyConfigurationBlock2, attribute_stimuli_2, true, 2)
   let block3 = createIATBlock(cb_keys.keyConfigurationBlock3, alternateStimuli(stim_var_a, stim_var_b, stim_name_a, stim_name_b, cb_keys.keyConfigurationBlock3), true, 3)
   let block4 = createIATBlock(cb_keys.keyConfigurationBlock3, alternateStimuli(stim_var_a, stim_var_b, stim_name_a, stim_name_b, cb_keys.keyConfigurationBlock3), false, 3)
-  let block5 = createIATBlock(cb_keys.keyConfigurationBlock4, attribute_stimuli, true, 4)
+  let block5 = createIATBlock(cb_keys.keyConfigurationBlock4, attribute_stimuli_5, true, 4)
   let block6 = createIATBlock(cb_keys.keyConfigurationBlock5, alternateStimuli(stim_var_a, stim_var_b, stim_name_a, stim_name_b, cb_keys.keyConfigurationBlock5), true, 5)
   let block7 = createIATBlock(cb_keys.keyConfigurationBlock5, alternateStimuli(stim_var_a, stim_var_b, stim_name_a, stim_name_b, cb_keys.keyConfigurationBlock5), false, 5)
 
@@ -87,7 +87,9 @@ let end_screen = {
   type: jsPsychHtmlButtonResponse,
   stimulus: info_style_UU + end_experiment,
   choices: ["Sluiten"],
-  on_finish: function() {window.location.href = "https://google.com";}
+  on_finish: function() {
+        uil.saveJson(jsPsych.data.get().json(), ACCESS_KEY);}
+  //on_finish: function() {window.location.href = "https://google.com";}
 };
 
 // Create timeline and run it

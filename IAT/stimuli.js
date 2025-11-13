@@ -87,7 +87,8 @@ let stim_name_b = buildStimuli(names_b, REP_NAME)
 
 // Group into target and attribute stimuli
 let target_stimuli = shuffle([...stim_var_a, ...stim_var_b]);
-let attribute_stimuli = shuffle([...stim_name_a, ...stim_name_b]);
+let attribute_stimuli_2 = shuffle([...stim_name_a, ...stim_name_b]); //two different orders of attribute stimuli for the two blocks
+let attribute_stimuli_5 = shuffle([...stim_name_a, ...stim_name_b]);
 
 // Set fixed key mappings for the four counterbalanced groups
 const COUNTERBALANCED_MAPPINGS = {
