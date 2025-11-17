@@ -17,7 +17,7 @@ To run the experiment locally, line `104` in `main.js` (about the server assignm
 
 ---
 
-## Folder Contents
+## Contents
 
 - `index.html`        – HTML file to run the experiment.
 - `main.js`           - File to create the overall timeline of the experiment.
