@@ -1,12 +1,12 @@
 // --- QUESTIONS ---
 
 // Likert scale labels
-let likert_ethnicity = ["migrant", "", "", "", "", "", "niet migrant"];
-let likert_gender    = ["man", "", "", "", "", "", "vrouw"];
-let likert_age       = ["jong", "", "", "", "", "", "oud"];
-let likert_location  = ["randstad", "", "", "", "", "", "niet randstad"];
-let likert_class     = ["hoge sociale klasse", "", "", "", "", "", "lage sociale klasse"];
-let likert_rating    = ["positief", "", "", "", "", "", "negatief"]
+let likertEthnicity = ["migrant", "", "", "", "", "", "niet migrant"];
+let likertGender    = ["man", "", "", "", "", "", "vrouw"];
+let likertAge       = ["jong", "", "", "", "", "", "oud"];
+let likertLocation  = ["randstad", "", "", "", "", "", "niet randstad"];
+let likertClass     = ["lage sociale klasse", "", "", "", "", "", "hoge sociale klasse"];
+let likertRating    = ["negatief", "", "", "", "", "", "positief"]
 
 // Randomize likert scales
 function randomizelabel(labels) {
@@ -16,48 +16,85 @@ function randomizelabel(labels) {
   return labels.slice();
 }
 
-const straattaal_woorden = "doekoe, waggie, osso, fittie, patta, pokoe"
-const nederlands_woorden = "auto, ruzie, liedje, schoen, geld, huis"
+// Words used in the IAT and included in the questionnaire as examples
+const straattaalWords = "doekoe, waggie, osso, fittie, patta, pokoe"
+const nederlandsWords = "auto, ruzie, liedje, schoen, geld, huis"
 
 // Create explicit questionnaire
 function createSurveyBlock(languageLabel, example_words) {
+
+  const ethnicityLabels = randomizelabel(likertEthnicity);
+  const genderLabels    = randomizelabel(likertGender);
+  const ageLabels       = randomizelabel(likertAge);
+  const locationLabels  = randomizelabel(likertLocation);
+  const classLabels     = randomizelabel(likertClass);
+  const ratingLabels    = randomizelabel(likertRating);
+
   return {
     type: jsPsychSurveyLikert,
     preamble: ` 
-      ${info_style_UU}
+      ${style_UU}
       <div style="max-width: 800px; margin: 0 auto; font-size:18px;">
         <p><b>In hoeverre associeert u de volgende kenmerken met ${languageLabel} (woorden zoals: ${example_words}) en sprekers hiervan?</b></p>
         <p><i>Selecteer een bolletje: hoe dichter u bij een van de kenmerken kiest, sterker u dat kenmerk associeert met <b>${languageLabel}</b>.</i></p>
       </div>`,
+
     questions: [
-      {prompt: `Welke achtergrond associeert u met sprekers van <b>${languageLabel}</b>?`, name: `Ethnicity_${languageLabel}`, labels: randomizelabel(likert_ethnicity)},
-      {prompt: `Welke geslacht associeert u met sprekers van <b>${languageLabel}</b>?`, name: `Gender_${languageLabel}`, labels: randomizelabel(likert_gender)},
-      {prompt: `Welke leeftijd associeert u met sprekers van <b>${languageLabel}</b>?`, name: `Age_${languageLabel}`, labels: randomizelabel(likert_age)},
-      {prompt: `Welke woonplek associeert u met sprekers van <b>${languageLabel}</b>?`, name: `Location_${languageLabel}`, labels: randomizelabel(likert_location)},
-      {prompt: `Welke sociale klasse associeert u met sprekers van <b>${languageLabel}</b>?`, name: `Class_${languageLabel}`, labels: randomizelabel(likert_class)},
-      {prompt: `Hoe staat u tegenover het gebruik van <b>${languageLabel}</b>?`, name: `Rating_${languageLabel}`, labels: randomizelabel(likert_rating)}
+      {prompt: `Welke achtergrond associeert u met sprekers van <b>${languageLabel}</b>?`, 
+       name: `Ethnicity_${languageLabel}`, labels: ethnicityLabels, required: true},
+      {prompt: `Welke geslacht associeert u met sprekers van <b>${languageLabel}</b>?`, 
+       name: `Gender_${languageLabel}`, labels: genderLabels, required: true},
+      {prompt: `Welke leeftijd associeert u met sprekers van <b>${languageLabel}</b>?`, 
+       name: `Age_${languageLabel}`, labels: ageLabels, required: true},
+      {prompt: `Welke woonplek associeert u met sprekers van <b>${languageLabel}</b>?`, 
+       name: `Location_${languageLabel}`, labels: locationLabels, required: true},
+      {prompt: `Welke sociale klasse associeert u met sprekers van <b>${languageLabel}</b>?`, 
+       name: `Class_${languageLabel}`, labels: classLabels, required: true},
+      {prompt: `Hoe staat u tegenover het gebruik van <b>${languageLabel}</b>?`, 
+       name: `Rating_${languageLabel}`, labels: ratingLabels, required: true}
     ],
-    randomize_question_order: true
+    randomize_question_order: true,
+
+    on_finish: function(data) {
+
+      function recode(value, reversed) {
+        if (value === null || value === undefined) return null;
+        return reversed ? (6 - value) : value; 
+      }
+
+      // Replace data with only recoded values
+      data.recoded = {
+        [`Ethnicity_${languageLabel}`]: recode(data.response[`Ethnicity_${languageLabel}`], ethnicityLabels[0] !== likertEthnicity[0]),
+        [`Gender_${languageLabel}`]:    recode(data.response[`Gender_${languageLabel}`],    genderLabels[0]    !== likertGender[0]),
+        [`Age_${languageLabel}`]:       recode(data.response[`Age_${languageLabel}`],       ageLabels[0]       !== likertAge[0]),
+        [`Location_${languageLabel}`]:  recode(data.response[`Location_${languageLabel}`],  locationLabels[0]  !== likertLocation[0]),
+        [`Class_${languageLabel}`]:     recode(data.response[`Class_${languageLabel}`],     classLabels[0]     !== likertClass[0]),
+        [`Rating_${languageLabel}`]:    recode(data.response[`Rating_${languageLabel}`],    ratingLabels[0]    !== likertRating[0])
+      };
+
+      delete data.response;
+    }
   };
 }
 
+
 // Create timeline for explicit questionnaire with randomized order of pages
-let expl_questionnaire = {
-  timeline: [createSurveyBlock("STRAATTAAL", straattaal_woorden), createSurveyBlock("STANDAARD NEDERLANDS", nederlands_woorden)]
+let explicitQuestionnaire = {
+  timeline: [createSurveyBlock("STRAATTAAL", straattaalWords), createSurveyBlock("STANDAARD NEDERLANDS", nederlandsWords)]
     .sort(() => Math.random() - 0.5)
 };
 
-// Demographics page 1
-let demographics_1 = {
+// Demographics page 1 (age + gender + education + residence)
+let demographics1 = {
   type: jsPsychSurveyHtmlForm,
   preamble: `
-    ${info_style_UU}
+    ${style_UU}
     <div style="max-width: 800px; margin: 5px auto; font-size: 18px;">
       <h3 style="margin-bottom: 10px;">Vul onderstaande vragen over uzelf in:</h3>
     </div>
   `,
   html: `
-    ${info_style_UU}
+    ${style_UU}
     <div style="margin-bottom: 30px;">
       <label for="age"><strong>Leeftijd:</strong></label>
       <input type="number" id="age" name="age" min="16" max="120" required style="width: 100%; padding: 8px;">
@@ -106,17 +143,17 @@ let demographics_1 = {
   button_label: "Volgende"
 };
 
-// Demograpics page 2
-let demographics_2 = {
+// Demograpics page 2 (country of origin + languages)
+let demographics2 = {
   type: jsPsychSurveyHtmlForm,
   preamble: `
-    ${info_style_UU}
+    ${style_UU}
     <div style="max-width: 800px; margin: 5px auto; font-size: 18px;">
       <h3 style="margin-bottom: 10px;">Vul onderstaande vragen over uzelf in:</h3>
     </div>
   `,
   html: `
-    ${info_style_UU}
+    ${style_UU}
     <div style="margin-bottom: 30px;">
       <label for="born_nl"><strong>Bent u in Nederland geboren?</strong></label>
       <select id="born_nl" name="born_nl" required onchange="document.getElementById('born_nl_text').style.display = this.value === 'Nee' ? 'block' : 'none';" style="width: 100%; padding: 8px;">
@@ -162,5 +199,5 @@ let demographics_2 = {
       <textarea id="languages" name="languages" rows="3" placeholder="Bijv. Nederlands, Engels" style="width: 100%; padding: 8px;"></textarea>
     </div>
   `,
-  button_label: "Voltooien"
+  button_label: "Experiment voltooien"
 };

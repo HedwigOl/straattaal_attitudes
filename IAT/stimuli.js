@@ -1,35 +1,73 @@
 // --- STIMULI ---
 
-// Target stimuli
-const variety_a = {
-  'STANDAARD NEDERLANDS': ['geld', 'ruzie', 'huis', 'auto', 'liedje', 'schoen']};
+// LABELS
+// Target labels
+const TAR_LABEL_A = 'STANDAARD NEDERLANDS';
+const TAR_LABEL_B = 'STRAATTAAL';
 
-const variety_b = { 
-  'STRAATTAAL': ['doekoe', 'fittie', 'osso', 'waggie', 'pokoe', 'patta']};
+// Attribute labels
+const ATT_LABEL_A = 'MIGRANT';
+const ATT_LABEL_B = 'NIET MIGRANT';
 
-// Attribute stimuli
-const names_a = {
-  'MIGRANT': ['Amira', 'Fatma', 'Samira', 'Salma', 'Mohamed', 'Ayoub', 'Murat', 'Ilias']};
+// STIMULI
+// Target stimuli (words)
+const WORDS_A = {
+  'TAR_LABEL_A': ['geld', 'ruzie', 'huis', 'auto', 'liedje', 'schoen']};
+const WORDS_B = { 
+  'TAR_LABEL_B': ['doekoe', 'fittie', 'osso', 'waggie', 'pokoe', 'patta']};
 
-const names_b = {
-  'NIET MIGRANT': ['Anne', 'Esther', 'Julia', 'Laura', 'Martijn', 'Dennis', 'Jesse', 'Thomas']};
+// Attribute stimuli (names)
+const NAMES_A = {
+  'ATT_LABEL_A': ['Amira', 'Fatma', 'Samira', 'Salma', 'Mohamed', 'Ayoub', 'Murat', 'Ilias']};
+const NAMES_B = {
+  'ATT_LABEL_B': ['Anne', 'Esther', 'Julia', 'Laura', 'Martijn', 'Dennis', 'Jesse', 'Thomas']};
 
-// Assign colours to the different categories
-const categoryColors = {
-  'STANDAARD NEDERLANDS': COLOR_TARGET,
-  'STRAATTAAL': COLOR_TARGET,
-  'MIGRANT': COLOR_ATTRIBUTE,
-  'NIET MIGRANT': COLOR_ATTRIBUTE
+// COUNTERBALANCED KEY MAPPINGS
+const COUNTERBALANCED_MAPPINGS = {
+  group1: {
+    'TAR_LABEL_A': 'left',
+    'TAR_LABEL_B': 'right',
+    'ATT_LABEL_A': 'right',
+    'ATT_LABEL_B': 'left',
+  },
+  group2: {
+    'TAR_LABEL_A': 'right',
+    'TAR_LABEL_B': 'left',
+    'ATT_LABEL_B': 'left',
+    'ATT_LABEL_A': 'right'
+  },
+  group3: {
+    'TAR_LABEL_A': 'left',
+    'TAR_LABEL_B': 'right',
+    'ATT_LABEL_B': 'right',
+    'ATT_LABEL_A': 'left'
+  },
+  group4: {
+    'TAR_LABEL_A': 'right',
+    'TAR_LABEL_B': 'left',
+    'ATT_LABEL_B': 'right',
+    'ATT_LABEL_A': 'left'
+  }
 };
 
-// Build stimuli and repeat for desired amount
-function buildStimuli(obj, repetitions) {
+// CREATE STIMULI  
+// Assign colors to the different categories
+const categoryColors = {
+  'TAR_LABEL_A': COLOR_TARGET,
+  'TAR_LABEL_B': COLOR_TARGET,
+  'ATT_LABEL_A': COLOR_ATTRIBUTE,
+  'ATT_LABEL_B': COLOR_ATTRIBUTE
+};
+
+// Build stimuli and repeat each stimulus for desired amount
+function buildStimuli(obj, repetitions, stimuli_type) {
   const stimuli = Object.entries(obj).flatMap(([category, words]) =>
     words.flatMap(word =>
       Array(repetitions).fill().map(() => ({
         stimulus: word,
         category,
-        color: categoryColors[category]
+        color: categoryColors[category],
+        type_stim: stimuli_type
       }))
     )
   );
@@ -38,7 +76,7 @@ function buildStimuli(obj, repetitions) {
 
 // randomization ensuring no stimuli are presented twice in a row and not four stimuli from the same category in a row
 function shuffle(array) {
-  const maxAttempts = 1000; 
+  const maxAttempts = 2000; 
   let attempts = 0;
   let shuffled;
 
@@ -51,7 +89,6 @@ function shuffle(array) {
       [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
 
-    // Check constraints
     let valid = true;
     for (let i = 1; i < shuffled.length; i++) {
       const curr = shuffled[i];
@@ -63,7 +100,7 @@ function shuffle(array) {
         break;
       }
 
-      // No 4 stimuli of the same categories in a row
+      // No four stimuli of the same categories in a row
       if (
         i >= 3 &&
         shuffled[i - 1].category === curr.category &&
@@ -74,46 +111,17 @@ function shuffle(array) {
         break;
       }
     }
-
     if (valid) return shuffled;
   }
 }
 
 // Create all stimuli
-let stim_var_a = buildStimuli(variety_a, REP_VAR)
-let stim_var_b = buildStimuli(variety_b, REP_VAR)
-let stim_name_a = buildStimuli(names_a, REP_NAME)
-let stim_name_b = buildStimuli(names_b, REP_NAME)
+let targetStimuli_A    = buildStimuli(WORDS_A, REP_TARGET,    "target")
+let targetStimuli_B    = buildStimuli(WORDS_B, REP_TARGET,    "target")
+let attributeStimuli_A = buildStimuli(NAMES_A, REP_ATTRIBUTE, "attribute")
+let attributeStimuli_B = buildStimuli(NAMES_B, REP_ATTRIBUTE, "attribute")
 
 // Group into target and attribute stimuli
-let target_stimuli = shuffle([...stim_var_a, ...stim_var_b]);
-let attribute_stimuli_2 = shuffle([...stim_name_a, ...stim_name_b]); //two different orders of attribute stimuli for the two blocks
-let attribute_stimuli_5 = shuffle([...stim_name_a, ...stim_name_b]);
-
-// Set fixed key mappings for the four counterbalanced groups
-const COUNTERBALANCED_MAPPINGS = {
-  group1: {
-    'STANDAARD NEDERLANDS': 'left',
-    'STRAATTAAL': 'right',
-    'MIGRANT': 'right',
-    'NIET MIGRANT': 'left',
-  },
-  group2: {
-    'STANDAARD NEDERLANDS': 'right',
-    'STRAATTAAL': 'left',
-    'NIET MIGRANT': 'left',
-    'MIGRANT': 'right'
-  },
-  group3: {
-    'STANDAARD NEDERLANDS': 'left',
-    'STRAATTAAL': 'right',
-    'NIET MIGRANT': 'right',
-    'MIGRANT': 'left'
-  },
-  group4: {
-    'STANDAARD NEDERLANDS': 'right',
-    'STRAATTAAL': 'left',
-    'NIET MIGRANT': 'right',
-    'MIGRANT': 'left'
-  }
-};
+let targetStimuli       = shuffle([...targetStimuli_A,    ...targetStimuli_B]);
+let attributeStimuli_b2 = shuffle([...attributeStimuli_A, ...attributeStimuli_B]); //random order for the two attribute blocks
+let attributeStimuli_b5 = shuffle([...attributeStimuli_A, ...attributeStimuli_B]);

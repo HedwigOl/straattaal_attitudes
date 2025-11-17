@@ -1,7 +1,7 @@
 // --- INSTRUCTIONS ---
 
 // Part 1 of the information letter
-const information_letter_1 =
+const informationLetter1 =
     `<div class = "instruction">
       <img src="https://www.uu.nl/sites/default/files/styles/original_image/public/uu-logo-en-geenwitruimte.png" 
            alt="UU logo" 
@@ -25,7 +25,7 @@ const information_letter_1 =
     </div>`
 
 // Part 2 of the information letter    
-const information_letter_2 = 
+const informationLetter2 = 
     `<div class = "instruction">
       <img src="https://www.uu.nl/sites/default/files/styles/original_image/public/uu-logo-en-geenwitruimte.png" 
            alt="UU logo" 
@@ -55,7 +55,7 @@ const information_letter_2 =
     </div>`
 
 // Informed consent checklist
-const consent_text = 
+const consentText = 
     `<div class="instruction">
       <img src="https://www.uu.nl/sites/default/files/styles/original_image/public/uu-logo-en-geenwitruimte.png" 
            alt="UU logo" 
@@ -73,13 +73,13 @@ const consent_text =
     </div>`
 
 // Text to print when no consent is given    
-const no_consent = 
+const noConsent = 
     `<div class = "instruction center-text">
       <p>Omdat u niet wilt deelnemen aan dit onderzoek, vragen wij u deze vragenlijst te sluiten en uw inzending op Prolific af te ronden door op de knop <strong>‘Stoppen zonder te voltooien’</strong> te klikken.</p>
     </div>`
 
 // General instruction of the IAT    
-const iat_instructions = 
+const iatInstructions = 
     `<div style="max-width:900px; margin:auto; font-family:sans-serif; text-align:left;">
       <p style="font-size:1.2rem;">
         In het eerste deel van dit experiment zult u steeds woorden en namen zo snel en correct mogelijk categoriseren met behulp van de <b>'f'</b> en <b>'j'</b> toetsen.
@@ -120,7 +120,7 @@ const iat_instructions =
   `
 
 // Environment checklist
-const environment_text = `
+const environmentText = `
 <div style="max-width: 700px; margin: 0 auto; text-align: left; line-height: 1.6;">
   <p><strong>Om ervoor te zorgen dat de resultaten van dit experiment zo nauwkeurig mogelijk zijn, vragen wij u het volgende te doen:</strong></p>
 
@@ -141,8 +141,49 @@ const environment_text = `
   </div>
   `
 
+// Create specific IAT instruction for each block
+function blockInstruction(leftCategories, rightCategories, partNumber) {
+  return `
+    <div style="position: relative; font-size: 18px; width: 900px; margin: auto; padding: 20px;">
+
+      <div style="display: flex; justify-content: center; gap: 400px; font-size: 18px; line-height: 1; margin-top: 80px;">
+        <div style="text-align:center;">
+          <p>Druk 'f' voor:</p>
+          ${colorLabels(leftCategories).join(" <br>+<br> ")}
+        </div>
+        <div style="text-align:center;">
+          <p>Druk 'j' voor:</p>
+          ${colorLabels(rightCategories).join(" <br>+<br> ")}
+        </div>
+      </div>
+
+      <br><br>
+
+      <div style="text-align: center; font-size: 18px;">
+        <u>Deel ${partNumber} van 5</u>
+      </div>
+
+      <br>
+
+      <div style="font-size: 18px; line-height: 1;">
+        <p>Druk met uw linkervinger op de <b>f</b>-toets voor items die behoren tot de categorie ${colorLabels(leftCategories).join(" + ")}.</p>
+        <p>Druk met uw rechtervinger op de <b>j</b>-toets voor items die behoren tot de categorie ${colorLabels(rightCategories).join(" + ")}. De items verschijnen één voor één.</p>
+        <p>Als u een fout maakt, verschijnt er een rood <span style="color:red; font-weight:bold;">X</span>. Druk dan op de andere toets om verder te gaan.</p>
+        <p><u>Probeer steeds zo snel mogelijk te antwoorden</u> terwijl u nauwkeurig blijft.</p>
+      </div>
+
+      <br><br>
+
+      <div style="text-align: center; font-size: 20px;">
+        Druk op de <b>spatiebalk</b> wanneer u klaar bent om te beginnen.
+      </div>
+
+    </div>
+  `;
+}
+
 // Text when experiment has ended
-const end_experiment = 
+const endExperiment = 
     `<div class = "instruction center-text">
       <h3>Bedankt voor uw deelname!</h3>
       <p>Klik op de onderstaande knop om terug te gaan naar Prolific en uw deelname te registreren.</p>

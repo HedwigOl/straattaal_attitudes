@@ -8,19 +8,6 @@ function assignStimulusKeys(stimuli, keyConfiguration) {
   }));
 }
 
-// COUNTERBALANCING
-function getKeyConfigurationForGroup(groupName) {
-  return COUNTERBALANCED_MAPPINGS[groupName];
-}
-
-// RANDOMIZATION
-// Randomize key configuration language varieties (TO DO delete when counterbalancing is fully working and checked)
-function randomkeyConfiguration(...categories) {
-  return Math.random() < 0.5
-    ? { [categories[0]]: 'left', [categories[1]]: 'right' }
-    : { [categories[0]]: 'right', [categories[1]]: 'left' };
-}
-
 // Reverse a category mapping
 function reversekeyConfiguration(keyConfiguration) {
   return Object.fromEntries(
@@ -29,19 +16,18 @@ function reversekeyConfiguration(keyConfiguration) {
 }
 
 // Returns the key mappings based on the counterbalanced conditions
-function setup_key_configuration(groupName) {
-  const keyConfig = getKeyConfigurationForGroup(groupName);
+function setupKeyConfiguration(groupName) {
+  const keyConfig = COUNTERBALANCED_MAPPINGS[groupName];
 
   const keyConfigurationBlock1 = {
-    'STANDAARD NEDERLANDS': keyConfig['STANDAARD NEDERLANDS'],
-    'STRAATTAAL': keyConfig['STRAATTAAL']};
+    'TAR_LABEL_A': keyConfig['TAR_LABEL_A'],
+    'TAR_LABEL_B': keyConfig['TAR_LABEL_B']};
   const keyConfigurationBlock2 = {
-    'NIET MIGRANT': keyConfig['NIET MIGRANT'],
-    'MIGRANT': keyConfig['MIGRANT']};
+    'ATT_LABEL_A': keyConfig['ATT_LABEL_A'],
+    'ATT_LABEL_B': keyConfig['ATT_LABEL_B']};
   const keyConfigurationBlock3 = { ...keyConfigurationBlock1, ...keyConfigurationBlock2 };
   const keyConfigurationBlock4 = reversekeyConfiguration(keyConfigurationBlock2);
   const keyConfigurationBlock5 = { ...keyConfigurationBlock1, ...keyConfigurationBlock4 };
-
 
   return {
     keyConfigurationBlock1,
@@ -52,14 +38,7 @@ function setup_key_configuration(groupName) {
   };
 }
 
-// Set key configurations for all blocks (randomised version) (if using replace with label_??)
-//let keyConfigurationBlock1 = randomkeyConfiguration('STANDAARD NEDERLANDS', 'STRAATTAAL');
-//let keyConfigurationBlock2 = randomkeyConfiguration('NIET MIGRANT', 'MIGRANT');
-//let keyConfigurationBlock3 = {...keyConfigurationBlock1, ...keyConfigurationBlock2};
-//let keyConfigurationBlock4 = reversekeyConfiguration(keyConfigurationBlock2);
-//let keyConfigurationBlock5 = {...keyConfigurationBlock1, ...keyConfigurationBlock4};
-
-//alternate stimuli using procedure of Greenwald et al., 2022
+// Alternate stimuli using procedure of Greenwald et al., 2022
 function alternateStimuli(targets_A, targets_B, attributes_A, attributes_B) {
 
   let tA = jsPsych.randomization.shuffle([...targets_A]);
@@ -92,21 +71,24 @@ function alternateStimuli(targets_A, targets_B, attributes_A, attributes_B) {
   return combined;
 }
 
-// Create fixation cross with labels present
-function createFixationTrial (leftLabels, rightLabels, duration=250) {
+// Create fixation trial with labels present
+function createFixationTrial (leftLabels, rightLabels) {
   return {
     type: jsPsychIatHtml,
     stimulus: '<div class="stimulus"></div>',
     stim_key_association: ' ',
     force_correct_key_press: false,
-    trial_duration: duration, 
+    trial_duration: TRIAL_INTERVAL, 
     left_category_key: LEFT_KEY,
     right_category_key: RIGHT_KEY,
     left_category_label: colorLabels(leftLabels),
     right_category_label: colorLabels(rightLabels),
-    response_ends_trial: false}
+    response_ends_trial: false,
+    data: {stimulus: 'fixation'}
   }
+}
 
+// Add colors to the labels of the attribute categories
 function colorLabels(labelsArray) {
   return labelsArray.map(label => {
     const color = categoryColors[label] || 'black';
@@ -115,11 +97,11 @@ function colorLabels(labelsArray) {
 }
 
 // Create all trials for the IAT
-function createIATTrials(stimuli, leftLabels, rightLabels, fixationDuration = 500) {
+function createIATTrials(stimuli, leftLabels, rightLabels, nr_block) {
 
   return {
     timeline: [
-      createFixationTrial(leftLabels, rightLabels, fixationDuration),
+      createFixationTrial(leftLabels, rightLabels),
       {
         type: jsPsychIatHtml,
         stimulus: function() {
@@ -138,7 +120,15 @@ function createIATTrials(stimuli, leftLabels, rightLabels, fixationDuration = 50
         right_category_key: RIGHT_KEY,
         left_category_label: colorLabels(leftLabels),
         right_category_label: colorLabels(rightLabels),
-        response_ends_trial: true
+        response_ends_trial: true,
+        data: {
+          stimulus: jsPsych.timelineVariable('stimulus'),
+          categorie: jsPsych.timelineVariable('category'),
+          left_key: leftLabels,
+          right_key: rightLabels,
+          attr_tar: jsPsych.timelineVariable('type_stim'),
+          trial_block: nr_block
+        }
       }
     ],
     timeline_variables: stimuli,
@@ -153,66 +143,47 @@ function instructionIAT(keyConfiguration, block_nr) {
     stimulus: function() {
       let leftCats = Object.keys(keyConfiguration).filter(k => keyConfiguration[k] == 'left');
       let rightCats = Object.keys(keyConfiguration).filter(k => keyConfiguration[k] == 'right');
-
-      return `
-        <div style="position: relative; font-size: 18px; width: 900px; margin: auto; padding: 20px;">
-
-          <div style="display: flex; justify-content: center; gap: 400px; font-size: 18px; line-height: 1; margin-top: 80px;">
-            <div style="text-align:center;">
-              <p>Druk 'f' voor:</p>
-              ${colorLabels(leftCats).join(" <br>+<br> ")}
-            </div>
-            <div style="text-align:center;">
-              <p>Druk 'j' voor:</p>
-              ${colorLabels(rightCats).join(" <br>+<br> ")}
-            </div>
-          </div>
-
-          <br><br>
-
-          <div style="text-align: center; font-size: 18px;">
-            <u>Deel ${block_nr} van 5</u>
-          </div>
-
-          <br>
-
-          <div style="font-size: 18px; line-height: 1;">
-            <p>Druk met uw linkervinger op de <b>f</b>-toets voor items die behoren tot de categorie ${colorLabels(leftCats).join(" + ")}.</p>
-            <p>Druk met uw rechtervinger op de <b>j</b>-toets voor items die behoren tot de categorie ${colorLabels(rightCats).join(" + ")}. De items verschijnen één voor één.</p>
-            <p>Als u een fout maakt, verschijnt er een rood <span style="color:red; font-weight:bold;">X</span>. Druk dan op de andere toets om verder te gaan.</p>
-            <p><u>Probeer steeds zo snel mogelijk te antwoorden</u> terwijl u nauwkeurig blijft.</p>
-          </div>
-
-          <br><br>
-
-          <div style="text-align: center; font-size: 20px;">
-            Druk op de <b>spatiebalk</b> wanneer u klaar bent om te beginnen.
-          </div>
-
-        </div>
-      `;
+      return blockInstruction(leftCats, rightCats, block_nr)
     },
     choices: [' '],
-    response_ends_trial: true
+    response_ends_trial: true,
+    data: {stimulus: 'iat_instructon'}
   };
 }
 
 // Create a full IAT block including instruction if desired
-function createIATBlock(keyConfiguration, stimuli, instructions, block_number) {
+function createIATBlock(keyConfiguration, stimuli, instructions, partNumber, blockNumber) {
 
   const timeline = [];
 
   if (instructions) {
-    timeline.push(instructionIAT(keyConfiguration, block_number));
+    timeline.push(instructionIAT(keyConfiguration, partNumber));
   }
 
   timeline.push(
     createIATTrials(
       assignStimulusKeys(stimuli, keyConfiguration),
       Object.keys(keyConfiguration).filter(k => keyConfiguration[k] === 'left'),
-      Object.keys(keyConfiguration).filter(k => keyConfiguration[k] === 'right')
+      Object.keys(keyConfiguration).filter(k => keyConfiguration[k] === 'right'),
+      blockNumber
     )
   );
 
-  return { timeline };
+  return {timeline};
 }
+
+
+// RANDOMIZATION
+// Randomize key configuration language varieties (TO DO delete when counterbalancing is fully working and checked)
+function randomkeyConfiguration(...categories) {
+  return Math.random() < 0.5
+    ? { [categories[0]]: 'left', [categories[1]]: 'right' }
+    : { [categories[0]]: 'right', [categories[1]]: 'left' };
+}
+
+// Set key configurations for all blocks (randomised version) (if using replace with label_??)
+//let keyConfigurationBlock1 = randomkeyConfiguration('TAR_LABEL_A', 'STRAATTAAL');
+//let keyConfigurationBlock2 = randomkeyConfiguration('NIET MIGRANT', 'MIGRANT');
+//let keyConfigurationBlock3 = {...keyConfigurationBlock1, ...keyConfigurationBlock2};
+//let keyConfigurationBlock4 = reversekeyConfiguration(keyConfigurationBlock2);
+//let keyConfigurationBlock5 = {...keyConfigurationBlock1, ...keyConfigurationBlock4};
