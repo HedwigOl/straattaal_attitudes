@@ -1,6 +1,6 @@
 import sys
 import pandas as pd
-import wn
+import wn         # not supported by newest version of Python, run in 3.11.7
 
 # Download Dutch extension of WordNet if not present
 try:
