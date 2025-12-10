@@ -1,7 +1,7 @@
 // --- GLOBALS ---
 
 // Access key used to upload data to the server.
-const ACCESS_KEY = '18685acb-9e82-4d54-b379-d35782c5f068';
+const ACCESS_KEY = '';
 
 // Amount of repetitions of each stimulus in each block
 const REP_TARGET = 4;
