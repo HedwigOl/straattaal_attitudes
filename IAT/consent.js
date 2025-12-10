@@ -38,12 +38,12 @@ let informationLetter = {
 let consentPage = {
     type: jsPsychHtmlButtonResponse,
     stimulus: consentText + style_UU,
-    choices: ["Ik ga akkoord", "Ik ga niet akkoord"],
+    choices: ["Ik ga niet akkoord", "Ik ga akkoord"],
     data: {stimulus: "consent"},
     on_finish: function(data){
-        if(data.response === 0){  // Consent given
+        if(data.response === 1){  // Consent given
             consent = true;}
-        else {                    // No consent
+        else {                    // No consent given
             consent = false;}
     }
 };
@@ -60,8 +60,9 @@ let noConsentEnd = {
 
 // Consent logic
 let checkConsent = {
-    timeline: [noConsentEnd + style_UU],
+    timeline: [noConsentEnd],
     conditional_function: function(){
         return !consent;
     }
+};
 };
