@@ -8,7 +8,7 @@ function assignStimulusKeys(stimuli, keyConfiguration) {
   }));
 }
 
-// Reverse a category mapping
+// Reverse key mapping
 function reversekeyConfiguration(keyConfiguration) {
   return Object.fromEntries(
     Object.entries(keyConfiguration).map(([k,v]) => [k, v === 'left' ? 'right' : 'left'])
@@ -20,11 +20,11 @@ function setupKeyConfiguration(groupName) {
   const keyConfig = COUNTERBALANCED_MAPPINGS[groupName];
 
   const keyConfigurationBlock1 = {
-    'TAR_LABEL_A': keyConfig['TAR_LABEL_A'],
-    'TAR_LABEL_B': keyConfig['TAR_LABEL_B']};
+    'STANDAARDNEDERLANDS': keyConfig['STANDAARDNEDERLANDS'],
+    'STRAATTAAL': keyConfig['STRAATTAAL']};
   const keyConfigurationBlock2 = {
-    'ATT_LABEL_A': keyConfig['ATT_LABEL_A'],
-    'ATT_LABEL_B': keyConfig['ATT_LABEL_B']};
+    'MET MIGRATIEACHTERGROND': keyConfig['MET MIGRATIEACHTERGROND'],
+    'ZONDER MIGRATIEACHTERGROND': keyConfig['ZONDER MIGRATIEACHTERGROND']};
   const keyConfigurationBlock3 = { ...keyConfigurationBlock1, ...keyConfigurationBlock2 };
   const keyConfigurationBlock4 = reversekeyConfiguration(keyConfigurationBlock2);
   const keyConfigurationBlock5 = { ...keyConfigurationBlock1, ...keyConfigurationBlock4 };
@@ -51,11 +51,10 @@ function alternateStimuli(targets_A, targets_B, attributes_A, attributes_B) {
   const numBlocks = Math.floor(Math.max(tA.length + tB.length, aA.length + aB.length) / 2);
 
   for (let block = 0; block < numBlocks; block++) {
-    // Pick target stimuli for odd trials, and attribute stimuli for even ones
     let oddTarget1 = tA.length ? tA.pop() : tB.pop();
     let oddTarget3 = tB.length ? tB.pop() : tA.pop();
-    let evenAttr2 = aA.length ? aA.pop() : aB.pop();
-    let evenAttr4 = aB.length ? aB.pop() : aA.pop();
+    let evenAttr2  = aA.length ? aA.pop() : aB.pop();
+    let evenAttr4  = aB.length ? aB.pop() : aA.pop();
 
     const blockTrials = [oddTarget1, evenAttr2, oddTarget3, evenAttr4];
 
@@ -98,7 +97,6 @@ function colorLabels(labelsArray) {
 
 // Create all trials for the IAT
 function createIATTrials(stimuli, leftLabels, rightLabels, nr_block) {
-
   return {
     timeline: [
       createFixationTrial(leftLabels, rightLabels),
@@ -116,6 +114,7 @@ function createIATTrials(stimuli, leftLabels, rightLabels, nr_block) {
         force_correct_key_press: true,
         display_feedback: true,
         trial_duration: 3000,
+        bottom_instructions: "",
         left_category_key: LEFT_KEY,
         right_category_key: RIGHT_KEY,
         left_category_label: colorLabels(leftLabels),
@@ -124,10 +123,20 @@ function createIATTrials(stimuli, leftLabels, rightLabels, nr_block) {
         data: {
           stimulus: jsPsych.timelineVariable('stimulus'),
           categorie: jsPsych.timelineVariable('category'),
-          left_key: leftLabels,
-          right_key: rightLabels,
+          left_key: leftLabels.join('-'),
+          right_key: rightLabels.join('-'),
           attr_tar: jsPsych.timelineVariable('type_stim'),
           trial_block: nr_block
+        },
+        on_finish: function(data){
+    // Determine which category the pressed key corresponds to, to add to data
+          if(data.response === LEFT_KEY){
+            data.response_category = leftLabels.join('-'); 
+          } else if(data.response === RIGHT_KEY){
+            data.response_category = rightLabels.join('-');
+          } else {
+            data.response_category = null;
+          }
         }
       }
     ],
@@ -151,14 +160,12 @@ function instructionIAT(keyConfiguration, block_nr) {
   };
 }
 
-// Create a full IAT block including instruction if desired
-function createIATBlock(keyConfiguration, stimuli, instructions, partNumber, blockNumber) {
+// Create a full IAT block including instruction
+function createIATBlock(keyConfiguration, stimuli, blockNumber) {
 
   const timeline = [];
 
-  if (instructions) {
-    timeline.push(instructionIAT(keyConfiguration, partNumber));
-  }
+  timeline.push(instructionIAT(keyConfiguration, blockNumber));
 
   timeline.push(
     createIATTrials(
@@ -171,19 +178,3 @@ function createIATBlock(keyConfiguration, stimuli, instructions, partNumber, blo
 
   return {timeline};
 }
-
-
-// RANDOMIZATION
-// Randomize key configuration language varieties (TO DO delete when counterbalancing is fully working and checked)
-function randomkeyConfiguration(...categories) {
-  return Math.random() < 0.5
-    ? { [categories[0]]: 'left', [categories[1]]: 'right' }
-    : { [categories[0]]: 'right', [categories[1]]: 'left' };
-}
-
-// Set key configurations for all blocks (randomised version) (if using replace with label_??)
-//let keyConfigurationBlock1 = randomkeyConfiguration('TAR_LABEL_A', 'STRAATTAAL');
-//let keyConfigurationBlock2 = randomkeyConfiguration('NIET MIGRANT', 'MIGRANT');
-//let keyConfigurationBlock3 = {...keyConfigurationBlock1, ...keyConfigurationBlock2};
-//let keyConfigurationBlock4 = reversekeyConfiguration(keyConfigurationBlock2);
-//let keyConfigurationBlock5 = {...keyConfigurationBlock1, ...keyConfigurationBlock4};
