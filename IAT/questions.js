@@ -1,82 +1,94 @@
 // --- QUESTIONS ---
 
-// Likert scale labels
-let likertEthnicity = ["migrant", "", "", "", "", "", "niet migrant"];
-let likertGender    = ["man", "", "", "", "", "", "vrouw"];
-let likertAge       = ["jong", "", "", "", "", "", "oud"];
-let likertLocation  = ["randstad", "", "", "", "", "", "niet randstad"];
-let likertClass     = ["lage sociale klasse", "", "", "", "", "", "hoge sociale klasse"];
-let likertRating    = ["negatief", "", "", "", "", "", "positief"]
-
-// Randomize likert scales
-function randomizelabel(labels) {
-  if (Math.random() < 0.5) {
-    return labels.slice().reverse();
-  }
-  return labels.slice();
-}
-
 // Words used in the IAT and included in the questionnaire as examples
 const straattaalWords = "doekoe, waggie, osso, fittie, patta, pokoe"
 const nederlandsWords = "auto, ruzie, liedje, schoen, geld, huis"
 
-// Create explicit questionnaire
+// Create explicit questionnaire with slider bars
 function createSurveyBlock(languageLabel, example_words) {
 
-  const ethnicityLabels = randomizelabel(likertEthnicity);
-  const genderLabels    = randomizelabel(likertGender);
-  const ageLabels       = randomizelabel(likertAge);
-  const locationLabels  = randomizelabel(likertLocation);
-  const classLabels     = randomizelabel(likertClass);
-  const ratingLabels    = randomizelabel(likertRating);
+  const questions = [
+    `
+    <p>Welke achtergrond associeert u met sprekers van <b>${languageLabel}</b>?</p>
+    <div style="text-align:center;">
+      <input type="range" name="Ethnicity_${languageLabel}" min="0" max="100" value="50" style="width:600px;">
+      <div style="display:flex; justify-content:space-between; width:600px; margin:0 auto; font-size:14px;">
+        <span>Met migratieachtergrond</span><span>Zonder migratieachtergrond</span>
+      </div>
+    </div>
+    `,
+    `
+    <p>Welke geslacht associeert u met sprekers van <b>${languageLabel}</b>?</p>
+    <div style="text-align:center;">
+      <input type="range" name="Gender_${languageLabel}" min="0" max="100" value="50" style="width:600px;">
+      <div style="display:flex; justify-content:space-between; width:600px; margin:0 auto; font-size:14px;">
+        <span>Man</span><span>Vrouw</span>
+      </div>
+    </div>
+    `,
+    `
+    <p>Welke leeftijd associeert u met sprekers van <b>${languageLabel}</b>?</p>
+    <div style="text-align:center;">
+      <input type="range" name="Age_${languageLabel}" min="0" max="100" value="50" style="width:600px;">
+      <div style="display:flex; justify-content:space-between; width:600px; margin:0 auto; font-size:14px;">
+        <span>Jong</span><span>Oud</span>
+      </div>
+    </div>
+    `,
+    `
+    <p>Welke woonplek associeert u met sprekers van <b>${languageLabel}</b>?</p>
+    <div style="text-align:center;">
+      <input type="range" name="Location_${languageLabel}" min="0" max="100" value="50" style="width:600px;">
+      <div style="display:flex; justify-content:space-between; width:600px; margin:0 auto; font-size:14px;">
+        <span>Niet Randstad</span><span>Randstad</span>
+      </div>
+    </div>
+    `,
+    `
+    <p>Welke sociale klasse associeert u met sprekers van <b>${languageLabel}</b>?</p>
+    <div style="text-align:center;">
+      <input type="range" name="Class_${languageLabel}" min="0" max="100" value="50" style="width:600px;">
+      <div style="display:flex; justify-content:space-between; width:600px; margin:0 auto; font-size:14px;">
+        <span>Lage klasse</span><span>Hoge klasse</span>
+      </div>
+    </div>
+    `,
+    `
+    <p>Hoe staat u tegenover het gebruik van <b>${languageLabel}</b>?</p>
+    <div style="text-align:center;">
+      <input type="range" name="Rating_${languageLabel}" min="0" max="100" value="50" style="width:600px;">
+      <div style="display:flex; justify-content:space-between; width:600px; margin:0 auto; font-size:14px;">
+        <span>Negatief</span><span>Positief</span>
+      </div>
+    </div>
+    `
+  ];
+
+  // Shuffle questions
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  const shuffledQuestions = shuffle(questions);
 
   return {
-    type: jsPsychSurveyLikert,
+    type: jsPsychSurveyHtmlForm,
     preamble: ` 
       ${style_UU}
       <div style="max-width: 800px; margin: 0 auto; font-size:18px;">
         <p><b>In hoeverre associeert u de volgende kenmerken met ${languageLabel} (woorden zoals: ${example_words}) en sprekers hiervan?</b></p>
-        <p><i>Selecteer een bolletje: hoe dichter u bij een van de kenmerken kiest, sterker u dat kenmerk associeert met <b>${languageLabel}</b>.</i></p>
+        <p><i>Gebruik de schuifbalken: hoe dichter u bij één van de uitersten kiest, hoe sterker u dat kenmerk associeert met <b>${languageLabel}</b>.</i></p>
       </div>`,
 
-    questions: [
-      {prompt: `Welke achtergrond associeert u met sprekers van <b>${languageLabel}</b>?`, 
-       name: `Ethnicity_${languageLabel}`, labels: ethnicityLabels, required: true},
-      {prompt: `Welke geslacht associeert u met sprekers van <b>${languageLabel}</b>?`, 
-       name: `Gender_${languageLabel}`, labels: genderLabels, required: true},
-      {prompt: `Welke leeftijd associeert u met sprekers van <b>${languageLabel}</b>?`, 
-       name: `Age_${languageLabel}`, labels: ageLabels, required: true},
-      {prompt: `Welke woonplek associeert u met sprekers van <b>${languageLabel}</b>?`, 
-       name: `Location_${languageLabel}`, labels: locationLabels, required: true},
-      {prompt: `Welke sociale klasse associeert u met sprekers van <b>${languageLabel}</b>?`, 
-       name: `Class_${languageLabel}`, labels: classLabels, required: true},
-      {prompt: `Hoe staat u tegenover het gebruik van <b>${languageLabel}</b>?`, 
-       name: `Rating_${languageLabel}`, labels: ratingLabels, required: true}
-    ],
-    randomize_question_order: true,
-
-    on_finish: function(data) {
-
-      function recode(value, reversed) {
-        if (value === null || value === undefined) return null;
-        return reversed ? (6 - value) : value; 
-      }
-
-      // Replace data with only recoded values
-      data.recoded = {
-        [`Ethnicity_${languageLabel}`]: recode(data.response[`Ethnicity_${languageLabel}`], ethnicityLabels[0] !== likertEthnicity[0]),
-        [`Gender_${languageLabel}`]:    recode(data.response[`Gender_${languageLabel}`],    genderLabels[0]    !== likertGender[0]),
-        [`Age_${languageLabel}`]:       recode(data.response[`Age_${languageLabel}`],       ageLabels[0]       !== likertAge[0]),
-        [`Location_${languageLabel}`]:  recode(data.response[`Location_${languageLabel}`],  locationLabels[0]  !== likertLocation[0]),
-        [`Class_${languageLabel}`]:     recode(data.response[`Class_${languageLabel}`],     classLabels[0]     !== likertClass[0]),
-        [`Rating_${languageLabel}`]:    recode(data.response[`Rating_${languageLabel}`],    ratingLabels[0]    !== likertRating[0])
-      };
-
-      delete data.response;
-    }
+    html: shuffledQuestions.join('') + `
+      <hr style="border: none; border-top: 2px solid white; margin: 20px 0;">
+    `
   };
 }
-
 
 // Create timeline for explicit questionnaire with randomized order of pages
 let explicitQuestionnaire = {
@@ -181,7 +193,7 @@ let demographics2 = {
     </div>
 
     <div style="max-width: 700px; margin: 30px auto; font-size: 18px; text-align: center;">
-      <label><strong>Gebruikt u Straattaal?</strong></label>
+      <label><strong>Beschouwt u uzelf als een gebruiker van Straattaal?</strong></label>
       <div style="display: flex; justify-content: center; gap: 30px; margin-top: 15px;">
         <label>
           <input type="radio" name="Straattaalspreker" value="Ja" required>
@@ -194,10 +206,25 @@ let demographics2 = {
       </div>
     </div>
 
+    <div style="max-width: 700px; margin: 30px auto; font-size: 18px; text-align: center;">
+      <label><strong>Heeft u ervaring met het doen van Implicit Association Tests (IATs)?</strong></label>
+      <div style="display: flex; justify-content: center; gap: 30px; margin-top: 15px;">
+        <label>
+          <input type="radio" name="IAT_experience" value="Ja" required>
+          Ja
+        </label>
+        <label>
+          <input type="radio" name="IAT_experience" value="Nee">
+          Nee
+        </label>
+      </div>
+    </div>
+
     <div style="margin-bottom: 30px;">
-      <label for="languages"><strong>Gesproken moedertalen:</strong></label>
+      <label for="languages"><strong>Welke talen beschouwt u als uw thuistalen?</strong></label>
       <textarea id="languages" name="languages" rows="3" placeholder="Bijv. Nederlands, Engels" style="width: 100%; padding: 8px;"></textarea>
     </div>
+
   `,
   button_label: "Experiment voltooien"
 };
