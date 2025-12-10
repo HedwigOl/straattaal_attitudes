@@ -18,7 +18,7 @@ const informationLetter1 =
       <h3>Hoe verloopt het experiment?</h3>
       <p>Het experiment bestaat uit twee delen. Na het accepteren van de voorwaarden begint het eerste deel.
       In dit deel zult u in verschillende rondes woorden en namen in twee groepen moeten categoriseren
-      (max. 10 minuten). In het tweede deel krijgt u enkele vragen over uzelf en over uw associaties met Straattaal en Straattaalsprekers
+      (max. 8 minuten). In het tweede deel krijgt u enkele vragen over uzelf en over uw associaties met Straattaal en Straattaalsprekers
        (max. 2 minuten).<br>
       Deelname aan dit onderzoek is volledig vrijwillig en u kunt op elk moment besluiten om niet deel te nemen
       of uw deelname te beëindigen, zonder opgaaf van reden en zonder nadelige gevolgen.</p>
@@ -40,13 +40,13 @@ const informationLetter2 =
       geldigheid van ons onderzoek kunnen controleren.</p>
       <p>In deze studie vragen we naast uw demografische gegevens ook naar uw etnische achtergrond. 
       Deze informatie helpt ons te begrijpen of uitkomsten, ervaringen of reacties verschillen tussen 
-      verschillende groepen. We begrijpen dat dit een gevoelig onderwerp kan zijn. Alle gegevens worden 
+      verschillende groepen. We begrijpen dat dit een gevoelig onderwerp kan zijn. <b> Alle gegevens worden 
       vertrouwelijk behandeld, veilig opgeslagen en alleen in geanonimiseerde vorm gebruikt, zodat niemand 
-      individueel te herleiden is. </p>
+      individueel te herleiden is. </b> </p>
 
       <h3>Vragen en klachten</h3>
       <p>Heeft u na het lezen van deze informatiebrief nog vragen over uw deelname? Neem dan gerust contact op
-      met Hedwig Oldenhof via <a href="mailto:h.oldenhof@uu.nl">h.oldenhof@uu.nl</a>.<br>
+      met Hedwig Oldenhof via <a href="mailto:h.oldenhof@students.uu.nl">h.oldenhof@students.uu.nl</a>.<br>
       Als u een klacht heeft over dit onderzoek, kunt u een e-mail sturen naar
       <a href="mailto:etc-beta-geo@uu.nl">etc-beta-geo@uu.nl</a>. U komt dan in contact met een onafhankelijke
       contactpersoon die niet betrokken is bij dit onderzoek en uw klacht zorgvuldig zal behandelen.<br>
@@ -64,7 +64,7 @@ const consentText =
       <i>“Taalattitudes van LLMs”</i> en verklaar ik het volgende:</p>
       <ul>
         <li> Ik heb de informatiebrief over het onderzoek zorgvuldig gelezen.</li>
-        <li> Ik weet dat ik de onderzoeker kan bereiken met vragen over de studie via <a href="mailto:h.oldenhof@uu.nl">h.oldenhof@uu.nl</a>.</li>
+        <li> Ik weet dat ik de onderzoeker kan bereiken met vragen over de studie via <a href="mailto:h.oldenhof@students.uu.nl">h.oldenhof@students.uu.nl</a>.</li>
         <li> Ik weet dat ik klachten over de studie kan indienen bij de ethische commissie van de Universiteit Utrecht (<a href="mailto:etc-beta-geo@uu.nl">etc-beta-geo@uu.nl</a>).</li>
         <li> Ik begrijp dat mijn deelname volledig vrijwillig is en dat ik op elk moment mag besluiten om niet deel te nemen of mijn deelname te beëindigen, zonder opgaaf van reden en zonder nadelige gevolgen.</li>
         <li> Ik geef toestemming voor de verwerking van mijn gegevens, mits deze anoniem of gecodeerd worden verwerkt, zoals toegelicht in de informatiebrief.</li>
@@ -72,7 +72,7 @@ const consentText =
       </ul>
     </div>`
 
-// Text to print when no consent is given    
+// Text when no consent is given    
 const noConsent = 
     `<div class = "instruction center-text">
       <p>Omdat u niet wilt deelnemen aan dit onderzoek, vragen wij u deze vragenlijst te sluiten en uw inzending op Prolific af te ronden door op de knop <strong>‘Stoppen zonder te voltooien’</strong> te klikken.</p>
@@ -99,15 +99,15 @@ const iatInstructions =
             <td style="border:1px solid #ccc; padding:8px;">doekoe, fittie, osso, waggie, pokoe, patta</td>
           </tr>
           <tr>
-            <td style="border:1px solid #ccc; padding:8px;"><b>Standaard Nederlands</b></td>
+            <td style="border:1px solid #ccc; padding:8px;"><b>Standaardnederlands</b></td>
             <td style="border:1px solid #ccc; padding:8px;">geld, ruzie, huis, auto, liedje, schoen</td>
           </tr>
                     <tr>
-            <td style="border:1px solid #ccc; padding:8px;"><b>Migrant</b></td>
+            <td style="border:1px solid #ccc; padding:8px;"><b>Met migratieachtergrond</b></td>
             <td style="border:1px solid #ccc; padding:8px;">Amira, Fatma, Samira, Salma, Mohamed, Ayoub, Murat, Ilias</td>
           </tr>
           <tr>
-            <td style="border:1px solid #ccc; padding:8px;"><b>Niet migrant</b></td>
+            <td style="border:1px solid #ccc; padding:8px;"><b>Zonder migratieachtergrond</b></td>
             <td style="border:1px solid #ccc; padding:8px;">Anne, Esther, Julia, Laura, Martijn, Dennis, Jesse, Thomas</td>
           </tr>
         </tbody>
@@ -126,18 +126,10 @@ const environmentText = `
 
   <ul>
     <li>Zorg dat u zich bevindt in een rustige omgeving.</li>
-    <li>Minimaliseer eventuele afleiding (zet bijvoorbeeld uw telefoon op stil of uit).</li>
+    <li>Minimaliseer eventuele afleiding (zorg dat u alleen in een ruimte bent en zet bijvoorbeeld uw telefoon op stil of uit).</li>
     <li>Gebruik een QWERTY-toetsenbord.</li>
     <li>Sluit alle overige tabbladen en programma's op uw computer zodat de reactietijden zo precies mogelijk gemeten kunnen worden.</li>
   </ul>
-
-  <p>Door deze stappen te volgen helpt u ons om betrouwbare data te verzamelen. Vink onderstaande vakjes aan om te bevestigen dat u deze stappen gevolgd heeft.</p>
-
-    <label><input type="checkbox" class="check-item"> Ik zit in een rustige omgeving.</label><br>
-    <label><input type="checkbox" class="check-item"> Ik heb alle mogelijke afleidingen geëlimineerd.</label><br>
-    <label><input type="checkbox" class="check-item"> Ik gebruik een QWERTY-toetsenbord.</label><br>
-    <label><input type="checkbox" class="check-item"> Ik heb alle andere tabbladen en programma's gesloten.</label><br> 
-    <br>
   </div>
   `
 
@@ -166,8 +158,10 @@ function blockInstruction(leftCategories, rightCategories, partNumber) {
       <br>
 
       <div style="font-size: 18px; line-height: 1;">
+        ${partNumber === 3 || partNumber === 5 ? `<p><b>Bij dit volgende deel krijgt u steeds afwisselend woorden en namen te zien.</b></p>` : ""}
         <p>Druk met uw linkervinger op de <b>f</b>-toets voor items die behoren tot de categorie ${colorLabels(leftCategories).join(" + ")}.</p>
         <p>Druk met uw rechtervinger op de <b>j</b>-toets voor items die behoren tot de categorie ${colorLabels(rightCategories).join(" + ")}. De items verschijnen één voor één.</p>
+        ${partNumber === 4 ? `<p><b>Let op: de toetsen van de twee categoriën zijn nu dus omgedraaid.</b></p>` : ""}
         <p>Als u een fout maakt, verschijnt er een rood <span style="color:red; font-weight:bold;">X</span>. Druk dan op de andere toets om verder te gaan.</p>
         <p><u>Probeer steeds zo snel mogelijk te antwoorden</u> terwijl u nauwkeurig blijft.</p>
       </div>
