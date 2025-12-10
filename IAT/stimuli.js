@@ -117,5 +117,3 @@ let attributeStimuli_B = buildStimuli(NAMES_B, REP_ATTRIBUTE, "attribute")
 let targetStimuli       = shuffle([...targetStimuli_A,    ...targetStimuli_B]);
 let attributeStimuli_b2 = shuffle([...attributeStimuli_A, ...attributeStimuli_B]);
 let attributeStimuli_b5 = shuffle([...attributeStimuli_A, ...attributeStimuli_B]);
-
-let attributeStimuli_b5 = shuffle([...attributeStimuli_A, ...attributeStimuli_B]);
