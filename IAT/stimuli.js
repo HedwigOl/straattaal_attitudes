@@ -1,62 +1,54 @@
 // --- STIMULI ---
 
-// LABELS
-// Target labels
-const TAR_LABEL_A = 'STANDAARD NEDERLANDS';
-const TAR_LABEL_B = 'STRAATTAAL';
-
-// Attribute labels
-const ATT_LABEL_A = 'MIGRANT';
-const ATT_LABEL_B = 'NIET MIGRANT';
-
-// STIMULI
 // Target stimuli (words)
 const WORDS_A = {
-  'TAR_LABEL_A': ['geld', 'ruzie', 'huis', 'auto', 'liedje', 'schoen']};
+  'STANDAARDNEDERLANDS': ['geld', 'ruzie', 'huis', 'auto', 'liedje', 'schoen']};
 const WORDS_B = { 
-  'TAR_LABEL_B': ['doekoe', 'fittie', 'osso', 'waggie', 'pokoe', 'patta']};
+  'STRAATTAAL'         : ['doekoe', 'fittie', 'osso', 'waggie', 'pokoe', 'patta']};
 
 // Attribute stimuli (names)
 const NAMES_A = {
-  'ATT_LABEL_A': ['Amira', 'Fatma', 'Samira', 'Salma', 'Mohamed', 'Ayoub', 'Murat', 'Ilias']};
+  'MET MIGRATIEACHTERGROND'   : ['Amira', 'Fatma', 'Samira', 'Salma', 'Mohamed', 
+                                  'Ayoub', 'Murat', 'Ilias']};
 const NAMES_B = {
-  'ATT_LABEL_B': ['Anne', 'Esther', 'Julia', 'Laura', 'Martijn', 'Dennis', 'Jesse', 'Thomas']};
+  'ZONDER MIGRATIEACHTERGROND': ['Anne', 'Esther', 'Julia', 'Laura', 'Martijn', 
+                                 'Dennis', 'Jesse', 'Thomas']};
 
 // COUNTERBALANCED KEY MAPPINGS
 const COUNTERBALANCED_MAPPINGS = {
   group1: {
-    'TAR_LABEL_A': 'left',
-    'TAR_LABEL_B': 'right',
-    'ATT_LABEL_A': 'right',
-    'ATT_LABEL_B': 'left',
+    'STANDAARDNEDERLANDS'       : 'left',
+    'STRAATTAAL'                : 'right',
+    'MET MIGRATIEACHTERGROND'   : 'right',
+    'ZONDER MIGRATIEACHTERGROND': 'left',
   },
   group2: {
-    'TAR_LABEL_A': 'right',
-    'TAR_LABEL_B': 'left',
-    'ATT_LABEL_B': 'left',
-    'ATT_LABEL_A': 'right'
+    'STANDAARDNEDERLANDS'       : 'right',
+    'STRAATTAAL'                : 'left',
+    'MET MIGRATIEACHTERGROND'   : 'right',
+    'ZONDER MIGRATIEACHTERGROND': 'left'
   },
   group3: {
-    'TAR_LABEL_A': 'left',
-    'TAR_LABEL_B': 'right',
-    'ATT_LABEL_B': 'right',
-    'ATT_LABEL_A': 'left'
+    'STANDAARDNEDERLANDS'       : 'left',
+    'STRAATTAAL'                : 'right',
+    'MET MIGRATIEACHTERGROND'   : 'left',
+    'ZONDER MIGRATIEACHTERGROND': 'right'
   },
   group4: {
-    'TAR_LABEL_A': 'right',
-    'TAR_LABEL_B': 'left',
-    'ATT_LABEL_B': 'right',
-    'ATT_LABEL_A': 'left'
+    'STANDAARDNEDERLANDS'       : 'right',
+    'STRAATTAAL'                : 'left',
+    'MET MIGRATIEACHTERGROND'   : 'left',
+    'ZONDER MIGRATIEACHTERGROND': 'right'    
   }
 };
 
 // CREATE STIMULI  
 // Assign colors to the different categories
 const categoryColors = {
-  'TAR_LABEL_A': COLOR_TARGET,
-  'TAR_LABEL_B': COLOR_TARGET,
-  'ATT_LABEL_A': COLOR_ATTRIBUTE,
-  'ATT_LABEL_B': COLOR_ATTRIBUTE
+  'STANDAARDNEDERLANDS'       : COLOR_TARGET,
+  'STRAATTAAL'                : COLOR_TARGET,
+  'MET MIGRATIEACHTERGROND'   : COLOR_ATTRIBUTE,
+  'ZONDER MIGRATIEACHTERGROND': COLOR_ATTRIBUTE
 };
 
 // Build stimuli and repeat each stimulus for desired amount
@@ -74,7 +66,7 @@ function buildStimuli(obj, repetitions, stimuli_type) {
   return stimuli;
 }
 
-// randomization ensuring no stimuli are presented twice in a row and not four stimuli from the same category in a row
+// Randomization with no stimuli presented twice in a row and not four stimuli from the same category in a row
 function shuffle(array) {
   const maxAttempts = 2000; 
   let attempts = 0;
@@ -123,5 +115,7 @@ let attributeStimuli_B = buildStimuli(NAMES_B, REP_ATTRIBUTE, "attribute")
 
 // Group into target and attribute stimuli
 let targetStimuli       = shuffle([...targetStimuli_A,    ...targetStimuli_B]);
-let attributeStimuli_b2 = shuffle([...attributeStimuli_A, ...attributeStimuli_B]); //random order for the two attribute blocks
+let attributeStimuli_b2 = shuffle([...attributeStimuli_A, ...attributeStimuli_B]);
+let attributeStimuli_b5 = shuffle([...attributeStimuli_A, ...attributeStimuli_B]);
+
 let attributeStimuli_b5 = shuffle([...attributeStimuli_A, ...attributeStimuli_B]);
