@@ -193,7 +193,7 @@ let demographics2 = {
     </div>
 
     <div style="max-width: 700px; margin: 30px auto; font-size: 18px; text-align: center;">
-      <label><strong>Beschouwt u uzelf als een gebruiker van Straattaal?</strong></label>
+      <label><strong>Ziet u uzelf als een gebruiker van Straattaal?</strong></label>
       <div style="display: flex; justify-content: center; gap: 30px; margin-top: 15px;">
         <label>
           <input type="radio" name="Straattaalspreker" value="Ja" required>
@@ -228,3 +228,4 @@ let demographics2 = {
   `,
   button_label: "Experiment voltooien"
 };
+
