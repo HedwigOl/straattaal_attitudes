@@ -1,0 +1,33 @@
+library(tidyverse)
+library(irr)
+
+folder_path <- "C:\\Users\\hedwi\\Documents\\Pilot_LLMs"
+
+# List all CSV files
+csv_files <- list.files(folder_path, pattern = "\\.csv$", full.names = TRUE)
+
+# Read, label and combine CSV files into one data frame
+big_table <- csv_files %>% 
+  set_names() %>%
+  map_df(~ read.csv2(.x), .id = "source") %>%
+  mutate(
+    file = str_remove(basename(source), "\\.csv$"),                       # Get file name
+    LLM = str_split_fixed(file, "_", 4)[,3],                              # Extract LLM from file name
+    temperature = str_split_fixed(file, "_", 4)[,4],                      # Extract temperature from file name
+    Straattaal_added = if_else(str_detect(prompt, "in Straattaal"), 1, 0) # Add 1 if 'in Straattaal' is included in prompt
+  ) %>%
+  select(-source, -file) 
+
+# Calculate Cohen's Kappa between evaluation methods
+kappa2(big_table[, c("check_meaning", "check_meaning_manual")])
+kappa2(big_table[, c("check_meaning_WordNet", "check_meaning_manual")])
+
+# Summarize proportion of correctness of manual evaluation for all LLMs and temperatures
+proportion_table <- big_table %>%
+  group_by(LLM, temperature, Straattaal_added) %>%
+  summarise(
+    n_total = n(),                        
+    n_meaning_1 = sum(check_meaning_manual),     
+    proportion = round(mean(check_meaning_manual), 3)     
+  ) %>%
+  ungroup()
