@@ -1,4 +1,4 @@
-# 
+#
 
 This is the repository of the master's thesis "Implicit and Explicit Language Attitudes toward the Dutch Multiethnolect Straattaal in Humans and Large Language Models".
 
@@ -13,14 +13,9 @@ and extracting the responses in the desired format from the LLM output. For all 
 
 ## Contents
 
-- `index.html`        – HTML file to run the experiment.
-- `main.js`           - File to create the overall timeline of the experiment.
-- `stimuli.js`        - Creation of stimuli and labels.
-- `questions.js`      - Questions used in the explicit questionnaire and demographics section.
-- `globals.js`        - Global variables and the acces key for connecting the experiment to the data server.
-- `iat.js`            - Creates the IAT trials, fixations between trials and block specific instructions.
-- `consent.js`           - Consent procedure including ending the experiment if no consent is given.
-- `instructions.js`      - Instruction letter and instructions for the different parts of the experiment.
-- `jspsych_iat_dutch.js` - JsPsych's IAT plugin updated with Dutch instructions.
+- 'Human pretest'     - Files for creating name stimuli and running data analysis on pretest for stimuli and labels.
+- 'LLM pretest'       - Files for creating and running prompts, and R files used in data analysis of LLM familiarity with Straattaal words and assocations with names
+- 'IAT'               - Files for creating and analysing Implicit Association Test
+- 'LLM WAT'           - Files for creating and running prompts, and R files using in data analysis for the LLM Word Association Test
 
 ---
