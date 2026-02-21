@@ -1,10 +1,6 @@
 // --- MAIN ---
 
-// Save data to data server at the end of the experiment
-let jsPsych = initJsPsych({
-  on_finish: function() {
-    uil.saveData(ACCESS_KEY, jsPsych.data.get().json());}
-});
+let jsPsych = initJsPsych();
 
 // Information letter and consent procedure
 let consentProcedure = {
@@ -54,7 +50,7 @@ function createFullIAT (cb_keys){
   return { timeline: blocks.flat() };
 }
 
-// Question about being disturbed in the experiment
+//Question about being disturbed in the experiment
 let disturbedQuestion = {
   type: jsPsychSurveyText,
   preamble: style_UU + "",
@@ -69,17 +65,29 @@ let disturbedQuestion = {
   ]
 };
 
-// Demographics questionnaire
+// Demographics questionnaire trials
 let demographics = {
   timeline : [demographics1, demographics2]
 };
 
-// End screen and redirection to Prolific (TODO: redirect to prolific site)
+// Trial to save experiment data to the data server
+let saveDataTrial = {
+  type: jsPsychCallFunction,
+  func: function() {
+    uil.saveData(ACCESS_KEY, jsPsych.data.get().json());
+  }
+};
+
+// End screen and redirection to Prolific
 let end = {
   type: jsPsychHtmlButtonResponse,
   stimulus: style_UU + endExperiment,
   choices: ["Sluiten"],
-  on_finish: function() {window.location.href = "https://google.com";},
+  on_finish: function() {
+    setTimeout(function () {
+      window.location.href = "https://app.prolific.com/submissions/complete?cc=C1CUG1R5";
+    }, 1200);
+  },
   data: {stimulus: "end"}
 };
 
@@ -94,12 +102,11 @@ function main() {
     const cb_keys = setupKeyConfiguration(group_name);
     let IAT = createFullIAT(cb_keys);
 
-    // Add participant ID
     jsPsych.data.addProperties({subject_ID:  Math.floor(Math.random() * 10000) + 1,
                                 group: group_name});
                                           
     let timeline = [consentProcedure, prolificID, environmentCheck, generalIatInstruction, 
-                    IAT, explicitQuestionnaire, disturbedQuestion, demographics, end];
+                    IAT, explicitQuestionnaire, disturbedQuestion, demographics, saveDataTrial, end];
 
     jsPsych.run(timeline);
   });
