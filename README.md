@@ -13,9 +13,9 @@ and extracting the responses in the desired format from the LLM output. For all 
 
 ## Contents
 
-- 'Human pretest'     - Files for creating name stimuli and running data analysis on pretest for stimuli and labels.
-- 'LLM pretest'       - Files for creating and running prompts, and R files used in data analysis of LLM familiarity with Straattaal words and assocations with names
-- 'IAT'               - Files for creating and analysing Implicit Association Test
-- 'LLM WAT'           - Files for creating and running prompts, and R files using in data analysis for the LLM Word Association Test
+- `Human pretest`     - Files for creating name stimuli and running data analysis on pretest for stimuli and labels.
+- `LLM pretest`       - Files for creating and running prompts, and R files used in data analysis of LLM familiarity with Straattaal words and assocations with names
+- `IAT`               - Files for creating and analysing Implicit Association Test
+- `LLM WAT`           - Files for creating and running prompts, and R files using in data analysis for the LLM Word Association Test
 
 ---
