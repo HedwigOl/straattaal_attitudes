@@ -58,6 +58,10 @@ iat_ingroup  <- bind_rows(lapply(files_ingroup,  clean_demographics)) %>%
 
 demographic_data <- bind_rows(iat_outgroup, iat_ingroup)
 
+# Take care of subject_ID which was appointed twice
+demographic_data <- demographic_data %>%
+  mutate(subject_ID = if_else(subject_ID == "7070" & age == 28, "7171", subject_ID))
+
 # Remove all participants who reported to be disturbed
 demographic_data <- demographic_data %>%
   filter(grepl("nee|niet|geen", disturbed, ignore.case = TRUE))
