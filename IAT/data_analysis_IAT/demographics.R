@@ -7,12 +7,14 @@ library(readr)
 data_folder_outgroup <- "outgroup_responses"
 data_folder_ingroup  <- "ingroup_responses"
 
+# Get all files from the folders
 files_outgroup <- list.files(data_folder_outgroup, pattern = "\\.csv$", full.names = TRUE)
 files_ingroup  <- list.files(data_folder_ingroup,  pattern = "\\.csv$", full.names = TRUE)
 
 # Function to create data frame with just demographic information
 clean_demographics <- function(file){
   
+  # Read csv file of one participant
   df <- read_csv(file, show_col_types = FALSE)
   
   # Extract trials related to questions
@@ -24,6 +26,7 @@ clean_demographics <- function(file){
     sapply(out, function(z) if (length(z) > 1) z[2] else NA)
   }
   
+  # Create data frame with answers to demographics questions
   dem_df <- data.frame(
     subject_ID       = question_trials$subject_ID,
     age              = extract_field(question_trials$response, "age"              ),
@@ -47,7 +50,7 @@ clean_demographics <- function(file){
   return(demographics)
 }
 
-# Add group membership and combine into one df
+# Add group membership and combine into one data frame for both groups
 iat_outgroup <- bind_rows(lapply(files_outgroup, clean_demographics)) %>%
   mutate(group_membership = "outgroup")
 iat_ingroup  <- bind_rows(lapply(files_ingroup,  clean_demographics)) %>%
@@ -55,8 +58,9 @@ iat_ingroup  <- bind_rows(lapply(files_ingroup,  clean_demographics)) %>%
 
 demographic_data <- bind_rows(iat_outgroup, iat_ingroup)
 
+# Remove all participants who reported to be disturbed
 demographic_data <- demographic_data %>%
-  filter(grepl("nee|niet", disturbed, ignore.case = TRUE))
+  filter(grepl("nee|niet|geen", disturbed, ignore.case = TRUE))
 
 # Write demographic df to csv file
 write.csv(demographic_data, file = "demographics.csv", row.names = FALSE)
@@ -109,23 +113,189 @@ ggplot(demographic_data, aes(x = age, fill = group_membership)) +
   ) +
   theme_minimal()
 
-# Create overview of gender of participants per group
-demographic_data %>%
-  group_by(group_membership, gender) %>%
-  summarise(count = n()) %>%
-  arrange(group_membership, gender)
+# Get general descriptives for age
+min(demographic_data$age)
+max(demographic_data$age)
+mean(demographic_data$age)
+sd(demographic_data$age)
 
-# Create overview of education of participants per group
-demographic_data %>%
-  group_by(group_membership, education) %>%
-  summarise(count = n()) %>%
-  arrange(group_membership, education)
+# t-test for age distribution in in- and out-group
+t.test(age ~ group_membership, data = demographic_data)
 
-# Create overview of randstad living of participants per group
-demographic_data %>%
-  group_by(group_membership, randstad) %>%
-  summarise(count = n()) %>%
-  arrange(group_membership, randstad)
+# Get standard deviation for age per group
+tapply(demographic_data$age, demographic_data$group_membership, sd, na.rm = TRUE)
+
+# Create table gender
+gender_table <- demographic_data %>%
+  count(group_membership, gender) %>%
+  pivot_wider(
+    names_from = gender,
+    values_from = n,
+    values_fill = 0
+  )
+
+# Chi-square test on gender
+chisq.test(gender_table %>% select(-group_membership))
+
+# Recode education into vocational and higher
+demographic_data <- demographic_data %>%
+  mutate(education_grouped = case_when(
+    education %in% c("HBO", "WO") ~ "higher",
+    education %in% c("Middelbaar onderwijs", "MBO") ~ "vocational"
+  ))
+
+# Create table with grouped education
+education_table <- demographic_data %>%
+  count(group_membership, education_grouped) %>%
+  pivot_wider(
+    names_from = education_grouped,
+    values_from = n,
+    values_fill = 0
+  )
+
+# Chi-square test on education
+chisq.test(education_table_grouped %>% select(-group_membership))
+
+# Recode 'ik twijfel' to 'nee' based on CBS definition of Randstad
+demographic_data <- demographic_data %>%
+  mutate(randstad = if_else(randstad == "Ik twijfel", "Nee", randstad))
+
+# Create table of residence location
+randstad_table <- demographic_data %>%
+  count(group_membership, randstad) %>%
+  pivot_wider(
+    names_from = randstad,
+    values_from = n,
+    values_fill = 0
+  )
+
+# Chi-square test on residence location
+chisq.test(randstad_table %>% select(-group_membership))
+
+# Create overview table 
+iat-experience_table <- demographic_data %>%
+  count(group_membership, iat_experience) %>%
+  pivot_wider(
+    names_from = iat_experience,
+    values_from = n,
+    values_fill = 0
+  )
+
+chisq.test(iat-experience_table %>% select(-group_membership))
+
+
+##### Run same analysis with straattaal_user as grouping 
+
+# t-test for age distribution in groups
+t.test(age ~ straattaal_user, data = demographic_data)
+tapply(demographic_data$age, demographic_data$straattaal_user, sd, na.rm = TRUE)
+
+
+# Create overview table gender
+gender_table_user <- demographic_data %>%
+  count(straattaal_user, gender) %>%
+  pivot_wider(
+    names_from = gender,
+    values_from = n,
+    values_fill = 0
+  )
+
+# Chi-square test on gender
+chisq.test(gender_table_user %>% select(-straattaal_user))
+
+# Create overview table education
+education_table_user <- demographic_data %>%
+  count(straattaal_user, education_grouped) %>%
+  pivot_wider(
+    names_from = education_grouped,
+    values_from = n,
+    values_fill = 0
+  )
+
+# Chi-square test on education
+chisq.test(education_table_user %>% select(-straattaal_user))
+
+
+# Create overview table residence location
+randstad_table_user <- demographic_data %>%
+  count(straattaal_user, randstad) %>%
+  pivot_wider(
+    names_from = randstad,
+    values_from = n,
+    values_fill = 0
+  )
+
+# Chi-square test on residence location
+chisq.test(randstad_table_user %>% select(-straattaal_user))
+
+# Create overview table 
+iat_exp_table_user <- demographic_data %>%
+  count(straattaal_user, iat_experience) %>%
+  pivot_wider(
+    names_from = iat_experience,
+    values_from = n,
+    values_fill = 0
+  )
+
+### Run same analysis for group membership based on responses to the two questions combined
+demographic_data$combined_group <- with(demographic_data,
+                                   ifelse(group_membership == "ingroup" & straattaal_user == "Ja", "Ingroup",
+                                          ifelse(group_membership == "outgroup" & straattaal_user == "Nee", "Outgroup",
+                                                 "Inconsistent"))
+)
+
+# anova for age distribution in groups
+anova_result <- aov(age ~ combined_group, data = demographic_data)
+summary(anova_result)
+tapply(demographic_data$age, demographic_data$combined_group, sd, na.rm = TRUE)
+tapply(demographic_data$age, demographic_data$combined_group, mean, na.rm = TRUE)
+
+
+# Create overview table gender
+gender_table_comb <- demographic_data %>%
+  count(combined_group, gender) %>%
+  pivot_wider(
+    names_from = gender,
+    values_from = n,
+    values_fill = 0
+  )
+
+# Chi-square test on gender
+chisq.test(gender_table_comb %>% select(-combined_group))
+
+# Create overview table education
+education_table_comb <- demographic_data %>%
+  count(combined_group, education_grouped) %>%
+  pivot_wider(
+    names_from = education_grouped,
+    values_from = n,
+    values_fill = 0
+  )
+
+# Chi-square test on education
+chisq.test(education_table_comb %>% select(-combined_group))
+
+
+# Create overview table residence location
+randstad_table_comb <- demographic_data %>%
+  count(combined_group, randstad) %>%
+  pivot_wider(
+    names_from = randstad,
+    values_from = n,
+    values_fill = 0
+  )
+
+# Chi-square test on residence location
+chisq.test(randstad_table_comb %>% select(-combined_group))
+
+# Create overview table 
+iat_exp_table_user <- demographic_data %>%
+  count(combined_group, iat_experience) %>%
+  pivot_wider(
+    names_from = iat_experience,
+    values_from = n,
+    values_fill = 0
+  )
 
 # Create overview of straattaal response of participants per group
 demographic_data %>%
