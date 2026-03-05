@@ -58,13 +58,13 @@ iat_ingroup  <- bind_rows(lapply(files_ingroup,  clean_demographics)) %>%
 
 demographic_data <- bind_rows(iat_outgroup, iat_ingroup)
 
-# Take care of subject_ID which was appointed twice
-demographic_data <- demographic_data %>%
-  mutate(subject_ID = if_else(subject_ID == "7070" & age == 28, "7171", subject_ID))
-
 # Remove all participants who reported to be disturbed
 demographic_data <- demographic_data %>%
   filter(grepl("nee|niet|geen", disturbed, ignore.case = TRUE))
+
+# Take care of subject_ID which was appointed twice
+demographic_data <- demographic_data %>%
+  mutate(subject_ID = if_else(subject_ID == "7070" & age == 28, "7171", subject_ID))
 
 # Write demographic df to csv file
 write.csv(demographic_data, file = "demographics.csv", row.names = FALSE)
@@ -241,6 +241,18 @@ iat_exp_table_user <- demographic_data %>%
     values_fill = 0
   )
 
+# Create overview table on versions for straattaal_users
+groups_table <- iat_dscores %>%
+  count(straattaal_user, group) %>%
+  pivot_wider(
+    names_from = group,
+    values_from = n,
+    values_fill = 0
+  )
+
+# Chi-square test on versions for straattaal_users
+chisq.test(groups_table %>% select(-straattaal_user))
+
 ### Run same analysis for group membership based on responses to the two questions combined
 demographic_data$combined_group <- with(demographic_data,
                                    ifelse(group_membership == "ingroup" & straattaal_user == "Ja", "Ingroup",
@@ -301,8 +313,14 @@ iat_exp_table_user <- demographic_data %>%
     values_fill = 0
   )
 
-# Create overview of straattaal response of participants per group
-demographic_data %>%
-  group_by(group_membership, straattaal_user) %>%
-  summarise(count = n()) %>%
-  arrange(group_membership, straattaal_user)
+# Create overview table on versions of the IAT
+groups_table <- iat_dscores %>%
+  count(combined_group, group) %>%
+  pivot_wider(
+    names_from = group,
+    values_from = n,
+    values_fill = 0
+  )
+
+# Chi-square test on versions of the IAT
+chisq.test(groups_table %>% select(-combined_group))
