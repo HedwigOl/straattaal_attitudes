@@ -273,18 +273,6 @@ t.test(IAT ~ order, data = iat_dscores)
 aggregate(IAT ~ order, data = iat_dscores, 
           FUN = function(x) c(mean = mean(x), sd = sd(x)))
 
-# Create overview table on versions for straattaal_users
-groups_table <- iat_dscores %>%
-  count(straattaal_user, group) %>%
-  pivot_wider(
-    names_from = group,
-    values_from = n,
-    values_fill = 0
-  )
-
-# Chi-square test on versions for straattaal_users
-chisq.test(groups_table %>% select(-straattaal_user))
-
 iat_dscores$group_membership <- recode(iat_dscores$group_membership,
                                       "ingroup"  = "In-group",
                                       "outgroup" = "Out-group")
@@ -334,15 +322,3 @@ boxplot(IAT ~ combined_group,
 lmer_model_combined <- lmer(IAT ~ combined_group + (1 | group), data = iat_dscores)
 summary(lmer_model_combined)
 emmeans(lmer_model_combined, pairwise ~ combined_group)
-
-# Create overview table on versions of the IAT
-groups_table <- iat_dscores %>%
-  count(combined_group, group) %>%
-  pivot_wider(
-    names_from = group,
-    values_from = n,
-    values_fill = 0
-  )
-
-# Chi-square test on versions of the IAT
-chisq.test(groups_table %>% select(-combined_group))
