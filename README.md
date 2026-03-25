@@ -13,13 +13,13 @@ In this repository are the **Javascript** files for the Implicit Association Tes
 ## Contents
 
 #### `Human experiments`
-- `Human pretest`                # Files for creating name stimuli and analyzing pretest data (stimuli & labels)
-- `IAT`                          # Files for creating and analyzing Implicit Association Test
+- `Human pretest`                - Files for creating name stimuli and analyzing pretest data (stimuli & labels)
+- `IAT`                          - Files for creating and analyzing Implicit Association Test
 
 #### `LLM experiments`
-- `Running LLM experiments`      # Files used to prompt the LLMs, used in all LLM experiments
-- `Testing names and Straattaal` # Files for creating prompts, parsing responses and R files for LLM familiarity with Straattaal words & name associations
-- `LLM WAT`                      # Files for creating prompts, parsing responses and R files for the LLM Word Association Test
-- `Relative Rating`              # Files for creating prompts, parsing responses and R files for the LLM Relative Rating Task
+- `Running LLM experiments`      - Files used to prompt the LLMs, used in all LLM experiments
+- `Testing names and Straattaal` - Files for creating prompts, parsing responses and R files for LLM familiarity with Straattaal words & name associations
+- `LLM WAT`                      - Files for creating prompts, parsing responses and R files for the LLM Word Association Test
+- `Relative Rating`              - Files for creating prompts, parsing responses and R files for the LLM Relative Rating Task
 
 ---
