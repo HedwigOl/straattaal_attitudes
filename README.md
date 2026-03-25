@@ -7,7 +7,7 @@ This is the repository of the master's thesis **"Implicit and Explicit Language 
 ## Overview
 
 In this repository are the **Javascript** files for the Implicit Association Test conducted with human participants and the **Python** files with the code for creating prompts, running prompt,
-and extracting the responses in the desired format from the LLM output. For all experiments, **R** files aren included used in data analysis.
+and extracting the responses in the desired format from the LLM output. For all experiments, **R** files used for the data analysis are included.
 
 ---
 
