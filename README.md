@@ -18,7 +18,7 @@ In this repository are the **Javascript** files for the Implicit Association Tes
 
 #### `LLM experiments`
 - `Running LLM experiments`      - Files used to prompt the LLMs, used in all LLM experiments
-- `Testing names and Straattaal` - Files for creating prompts, parsing responses and R files for LLM familiarity with Straattaal words & name associations
+- `Testing names and Straattaal` - Files for creating prompts, parsing responses and R files for LLM familiarity with Straattaal & names
 - `LLM WAT`                      - Files for creating prompts, parsing responses and R files for the LLM Word Association Test
 - `Relative Rating`              - Files for creating prompts, parsing responses and R files for the LLM Relative Rating Task
 
