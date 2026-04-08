@@ -3,7 +3,7 @@ library(irr)
 library(lme4)
 library(broom.mixed)
 
-folder_path <- "\\Straattaal_prompt_responses\\Gecheckt"
+folder_path <- "\\Straattaal_prompt_responses\\check-betekenis"
 
 # List all CSV files
 csv_files <- list.files(folder_path, pattern = "\\.csv$", full.names = TRUE)
