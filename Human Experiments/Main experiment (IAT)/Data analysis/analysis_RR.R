@@ -211,15 +211,10 @@ analyse_rr <- function(group_var){
   
 }
 
-# Run analysis with group membership based on prescreening question
+# Run analysis for group membership on the three grouping approaches
 analysis_rr_prescreening <- analyse_rr(group_membership)
-
-# Run analysis with group membership based on question after IAT
 analysis_rr_prescreening <- analyse_rr(straattaal_user)
-
-# Run analysis with group membership based on both questions
 analysis_rr_prescreening <- analyse_rr(combined_group)
-
 
 # Calculate mean rating difference for each attribute across all participants
 mean_by_attribute <- explicit_long %>%
@@ -231,9 +226,6 @@ mean_by_attribute <- explicit_long %>%
   ) %>%
   ungroup()
 
-write.csv2(mean_by_attribute, "RR_means_humans.csv", row.names = FALSE)
-
-
 explicit_means_long <- explicit_data %>%
   pivot_longer(
     cols = all_of(numeric_cols),
@@ -243,4 +235,6 @@ explicit_means_long <- explicit_data %>%
   group_by(attribute, language_variation = lang_variety) %>%
   summarise(mean_score = mean(score, na.rm = TRUE), .groups = "drop")
 
+# Write csv files with results
+write.csv2(mean_by_attribute,   "RR_means_humans.csv",     row.names = FALSE)
 write.csv2(explicit_means_long, "RR_means_humans_att.csv", row.names = FALSE)
