@@ -70,6 +70,8 @@ table_per_word <- proportion_per_word %>%
     )
   )
 
+write.csv(table_per_word, "table_per_word_LLMs.csv", row.names = FALSE)
+
 # Fit glmer to investigate effect of 'in Straattaal' in prompt
 model <- glmer(
   check_meaning ~ Straattaal_added + 
