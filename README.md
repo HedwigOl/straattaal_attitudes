@@ -15,7 +15,7 @@ In this repository are the **Javascript** files for the Implicit Association Tes
 #### `Human Experiments`
 - `Pretest`                      - Files for creating name stimuli and analyzing pretest data (stimuli & labels)
 - `Main experiment`              - Files for creating and analyzing Implicit Association Test
-- `WAT`                          - Files for analyzing the Word Association Test with humans
+- `WAT`                          - Files for analyzing the Word Association Test conducted with human participants
 
 #### `LLM Experiments`
 - `Running LLM Experiments`      - Files used to prompt the LLMs, used in all LLM experiments
