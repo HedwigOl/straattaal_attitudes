@@ -3,8 +3,7 @@ library(tidyr)
 library(purrr)
 library(stringr)
 
-# Path to folder with LLM reponses
-folder <- "C:\\Users\\hedwi\\Documents\\RR_cor_temp"
+folder <- "RR_cor_temp"
 
 # Read file and parse temperature + LLM from file name
 read_model_file <- function(file) {
