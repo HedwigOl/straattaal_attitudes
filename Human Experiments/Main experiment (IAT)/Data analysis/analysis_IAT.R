@@ -73,19 +73,29 @@ write.csv(iat_dscores, "IAT_dscores.csv", row.names = FALSE)
 # Recode versions to the original block order of Greenwald et al., 1998
 iat_dscores <- iat_dscores %>%
   mutate(
-    group = recode(group,
-                   group1="Version 1", group2="Version 4",
-                   group3="Version 3", group4="Version 2"),
-    order = if_else(group %in% c("Version 1","Version 2"),"Order 1","Order 2"),
+    version = recode(
+      group,
+      group1 = "Version 1",
+      group2 = "Version 4",
+      group3 = "Version 3",
+      group4 = "Version 2"
+    ),
+    
+    order = if_else(
+      version %in% c("Version 1", "Version 2"),
+      "Order 1",
+      "Order 2"
+    ),
     group_membership = recode(group_membership,
                               ingroup="In-group", outgroup="Out-group"),
     straattaal_user = recode(straattaal_user,
                              Ja="In-group", Nee="Out-group"),
     combined_group = case_when(
-      group_membership=="In-group" & straattaal_user=="In-group" ~ "Ingroup",
+      group_membership=="In-group"  & straattaal_user=="In-group" ~ "Ingroup",
       group_membership=="Out-group" & straattaal_user=="Out-group" ~ "Outgroup",
       TRUE ~ "Inconsistent"
-    )
+    ),
+    Membership = na_if(combined_group, "Inconsistent")
   )
 
 # T-test for d-scores deviating from zero
@@ -115,17 +125,24 @@ run_iat_analysis <- function(data, group_var){
     ggplot(data, aes(x = !!group_var, y = IAT)) +
       geom_boxplot() +
       geom_hline(yintercept = 0, color = "red") +
+      coord_cartesian(ylim = c(-2, 2)) +
       labs(x = group_name, y = "IAT D-score") +
       theme_classic()
   )
   
   # Run linear mixed effects model for group on d-scores
-  model <- lmer(reformulate(group_name, "IAT"), data = data)
+  model <- lmer(as.formula(paste("IAT ~", group_name, "+ (1 | order)")), data = data)
   print(summary(model))
   
   # Post-hoc if more than two groups (case for combined analysis)
   if (n_distinct(pull(data, !!group_var)) > 2) {
-    print(emmeans(model, pairwise ~ !!group_var))
+    
+    emm <- emmeans(
+      model,
+      as.formula(paste("pairwise ~", group_name))
+    )
+    
+    print(emm)
   }
 }
 
@@ -133,3 +150,10 @@ run_iat_analysis <- function(data, group_var){
 run_iat_analysis(iat_dscores, group_membership)
 run_iat_analysis(iat_dscores, straattaal_user)
 run_iat_analysis(iat_dscores, combined_group)
+
+# Run analyses of group membership on D-scores for combined group (inconsistent excluded)
+filtered_groups <- iat_dscores %>%
+  filter(!is.na(Membership))
+
+run_iat_analysis(filtered_groups, Membership)
+
