@@ -113,6 +113,12 @@ explicit_data_diff$combined_group <- with(explicit_data_diff,
                                                  "Inconsistent"))
 )
 
+explicit_data_diff$Membership <- with(explicit_data_diff,
+                                      ifelse(group_membership == "In-group" & straattaal_user == "In-group", "Ingroup",
+                                             ifelse(group_membership == "Out-group" & straattaal_user == "Out-group", "Outgroup",
+                                                    NA))
+)
+
 # Save explicit ratings to csv file
 write.csv(explicit_data_diff, file = "explicit_ratings.csv", row.names = FALSE)
 
@@ -124,26 +130,6 @@ explicit_long <- explicit_data_diff %>%
     values_to = "rating_diff"
   )
 
-# APA-style boxplot with red zero line for all attributes and all participants
-ggplot(explicit_long, aes(x = attribute, y = rating_diff, fill = attribute)) +
-  geom_boxplot(color = "black", width = 0.6, outlier.shape = 21, outlier.fill = "white") +
-  geom_hline(yintercept = 0, color = "red", linetype = "dashed", size = 0.8) +  # red zero line
-  scale_fill_grey(start = 0.7, end = 0.3) +   # subtle APA greys
-  labs(
-    x = "Attribute",
-    y = "Rating Difference"
-  ) +
-  theme_minimal(base_family = "Times New Roman") +
-  theme(
-    legend.position = "none",
-    panel.grid.major = element_blank(),
-    panel.grid.minor = element_blank(),
-    axis.line = element_line(color = "black"),
-    axis.text = element_text(size = 12),
-    axis.title = element_text(size = 13, face = "bold"),
-    plot.title = element_text(size = 14, face = "bold", hjust = 0.5)
-  )
-
 # T-test for d-score deviating from 0
 t.test(explicit_data_diff$age,       mu = 0)
 t.test(explicit_data_diff$class,     mu = 0)
@@ -152,18 +138,24 @@ t.test(explicit_data_diff$gender,    mu = 0)
 t.test(explicit_data_diff$location,  mu = 0)
 t.test(explicit_data_diff$rating,    mu = 0)
 
-
-analyse_rr <- function(group_var){
+analyse_rr <- function(data_models, data_long, group_var){
   
-  # Plot box plots for in-group and out-group for the six attributes
-  rr_plot <- ggplot(explicit_long, aes(x = {{group_var}}, y = rating_diff, fill = {{group_var}})) +
+  group_var <- rlang::ensym(group_var)
+  group_name <- rlang::as_string(group_var)
+  
+  # ----------------------
+  # Plot
+  # ----------------------
+  rr_plot <- ggplot(data_long,
+                    aes(x = !!group_var,
+                        y = rating_diff,
+                        fill = !!group_var)) +
     geom_boxplot(color = "black") +
-    geom_hline(yintercept = 0, color = "red", linetype = "dotted", size = 0.8) +
+    geom_hline(yintercept = 0, color = "red",
+               linetype = "dotted", linewidth = 0.8) +
     facet_wrap(~ attribute, scales = "free_y") +
-    labs(
-      x = "Group membership",
-      y = "Rating difference"
-    ) +
+    labs(x = "Group membership",
+         y = "Rating difference") +
     scale_fill_grey(start = 0.35, end = 0.8) +
     theme_minimal() +
     theme(
@@ -171,20 +163,32 @@ analyse_rr <- function(group_var){
       text = element_text(family = "Times New Roman")
     )
   
-  # Print the plot
   print(rr_plot)
   
-  # Convert variable to name for model formulas
-  group_name <- deparse(substitute(group_var))
+  # ----------------------
+  # Models (FIXED)
+  # ----------------------
+  form <- as.formula(paste0("age ~ ", group_name, " + (1|order)"))
+  lm_age <- lmer(form, data = data_models)
   
-  lm_age       <- lmer(as.formula(paste("age ~",       group_name, "+ (1|order)")), data = explicit_data_diff)
-  lm_class     <- lmer(as.formula(paste("class ~",     group_name, "+ (1|order)")), data = explicit_data_diff)
-  lm_ethnicity <- lmer(as.formula(paste("ethnicity ~", group_name, "+ (1|order)")), data = explicit_data_diff)
-  lm_gender    <- lmer(as.formula(paste("gender ~",    group_name, "+ (1|order)")), data = explicit_data_diff)
-  lm_location  <- lmer(as.formula(paste("location ~",  group_name, "+ (1|order)")), data = explicit_data_diff)
-  lm_rating    <- lmer(as.formula(paste("rating ~",    group_name, "+ (1|order)")), data = explicit_data_diff)
+  lm_class <- lmer(as.formula(paste0("class ~ ", group_name, " + (1|order)")),
+                   data = data_models)
   
-  # Print results of linear models
+  lm_ethnicity <- lmer(as.formula(paste0("ethnicity ~ ", group_name, " + (1|order)")),
+                       data = data_models)
+  
+  lm_gender <- lmer(as.formula(paste0("gender ~ ", group_name, " + (1|order)")),
+                    data = data_models)
+  
+  lm_location <- lmer(as.formula(paste0("location ~ ", group_name, " + (1|order)")),
+                      data = data_models)
+  
+  lm_rating <- lmer(as.formula(paste0("rating ~ ", group_name, " + (1|order)")),
+                    data = data_models)
+  
+  # ----------------------
+  # Output
+  # ----------------------
   print(summary(lm_age))
   print(summary(lm_class))
   print(summary(lm_ethnicity))
@@ -192,29 +196,45 @@ analyse_rr <- function(group_var){
   print(summary(lm_location))
   print(summary(lm_rating))
   
-  if (group_name == "combined_group") {
-    emm_age       <- emmeans(lm_age,       specs = group_name)
-    emm_class     <- emmeans(lm_class,     specs = group_name)
-    emm_ethnicity <- emmeans(lm_ethnicity, specs = group_name)
-    emm_gender    <- emmeans(lm_gender,    specs = group_name)
-    emm_location  <- emmeans(lm_location,  specs = group_name)
-    emm_rating    <- emmeans(lm_rating,    specs = group_name)
+  # ----------------------
+  # Post-hoc (only if 3+ groups)
+  # ----------------------
+  if (n_distinct(pull(data_models, !!group_var)) > 2) {
     
-    # Pairwise comparisons with Tukey adjustment for 3-level factor
-    print(pairs(emm_age,       adjust = "tukey"))
-    print(pairs(emm_class,     adjust = "tukey"))
-    print(pairs(emm_ethnicity, adjust = "tukey"))
-    print(pairs(emm_gender,    adjust = "tukey"))
-    print(pairs(emm_location,  adjust = "tukey"))
-    print(pairs(emm_rating,    adjust = "tukey"))
+    print(pairs(emmeans(lm_age, group_name), adjust = "tukey"))
+    print(pairs(emmeans(lm_class, group_name), adjust = "tukey"))
+    print(pairs(emmeans(lm_ethnicity, group_name), adjust = "tukey"))
+    print(pairs(emmeans(lm_gender, group_name), adjust = "tukey"))
+    print(pairs(emmeans(lm_location, group_name), adjust = "tukey"))
+    print(pairs(emmeans(lm_rating, group_name), adjust = "tukey"))
   }
-  
 }
 
-# Run analysis for group membership on the three grouping approaches
+analyse_rr(explicit_data_diff, explicit_long, group_membership)
+
+analyse_rr(explicit_data_diff, explicit_long, straattaal_user)
+
+analyse_rr(explicit_data_diff, explicit_long, combined_group)
+
+analyse_rr(filter(explicit_data_diff, !is.na(Membership)),
+           filter(explicit_long, !is.na(Membership)),
+           Membership)
+
+
+# Run analysis with group membership based on prescreening question
 analysis_rr_prescreening <- analyse_rr(group_membership)
+
+# Run analysis with group membership based on question after IAT
 analysis_rr_prescreening <- analyse_rr(straattaal_user)
+
+# Run analysis with group membership based on both questions
 analysis_rr_prescreening <- analyse_rr(combined_group)
+
+# Run analysis with group membership based on both questions (inconsistent participants excluded)
+filtered_rr <- iat_dscores %>%
+  filter(!is.na(Membership))
+analysis_rr_final        <- analyse_rr(Membership)
+
 
 # Calculate mean rating difference for each attribute across all participants
 mean_by_attribute <- explicit_long %>%
@@ -226,6 +246,9 @@ mean_by_attribute <- explicit_long %>%
   ) %>%
   ungroup()
 
+write.csv2(mean_by_attribute, "RR_means_humans.csv", row.names = FALSE)
+
+
 explicit_means_long <- explicit_data %>%
   pivot_longer(
     cols = all_of(numeric_cols),
@@ -235,6 +258,5 @@ explicit_means_long <- explicit_data %>%
   group_by(attribute, language_variation = lang_variety) %>%
   summarise(mean_score = mean(score, na.rm = TRUE), .groups = "drop")
 
-# Write csv files with results
-write.csv2(mean_by_attribute,   "RR_means_humans.csv",     row.names = FALSE)
 write.csv2(explicit_means_long, "RR_means_humans_att.csv", row.names = FALSE)
+
