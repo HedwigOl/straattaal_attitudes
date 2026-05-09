@@ -2,6 +2,8 @@ import os
 import pandas as pd
 from openai import OpenAI
 
+client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
+
 def run_experiment(model_name: str, prompts_path: str, answer_length=100, batch_size=8, temperature=0.001, it=2):
     #Setup paths
     script_dir = os.path.dirname(os.path.abspath(__file__))
