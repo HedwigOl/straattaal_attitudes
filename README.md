@@ -12,6 +12,9 @@ In this repository are the **Javascript** files for the Implicit Association Tes
 
 ## Contents
 
+#### `Comparison Human-LLM`
+- Files for calculating correlation between Relative Rating scores of human participants and LLMs
+
 #### `Human Experiments`
 - `Pretest`                      - Files for creating name stimuli and analyzing pretest data (stimuli & labels)
 - `Main experiment`              - Files for creating and analyzing Implicit Association Test
@@ -20,7 +23,7 @@ In this repository are the **Javascript** files for the Implicit Association Tes
 #### `LLM Experiments`
 - `Running LLM Experiments`      - Files used to prompt the LLMs, used in all LLM experiments
 - `Testing Names and Straattaal` - Files for creating prompts, parsing responses and R files for LLM familiarity with Straattaal & names
-- `LLM WAT`                      - Files for creating prompts, parsing responses and R files for the LLM Word Association Test
+- `LLM Word Association Test`    - Files for creating prompts, parsing responses and R files for the LLM Word Association Test
 - `Relative Rating`              - Files for creating prompts, parsing responses and R files for the LLM Relative Rating Task
 
 ---
