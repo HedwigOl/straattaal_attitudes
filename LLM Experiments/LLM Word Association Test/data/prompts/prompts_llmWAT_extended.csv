@@ -1,0 +1,79 @@
+prompt;labels;group_membership
+Hier is een lijst met woorden. Kies voor elk woord een naam NAME1 of NAME2 en schrijf deze achter het woord. De woorden zijn WORDS. Voeg geen extra tekst toe. Scheid woord en naam met - en scheid paren met een nieuwe regel. ;0;none
+Voor de onderstaande woorden kies NAME1 of NAME2 en schrijf deze naam achter het woord. De woorden zijn WORDS. Voeg geen extra tekst toe. Scheid woord en naam met - en scheid paren met een nieuwe regel. ;0;none
+Hier zijn een aantal woorden. Voor ieder woord, kies voor NAME1 of NAME2 en schrijf je keuze achter het woord. De woorden zijn WORDS. Voeg geen extra tekst toe. Scheid woord en naam met - en scheid paren met een nieuwe regel. ;0;none
+"Hier is een lijst met woorden. Kies voor elk woord een naam NAME1 of NAME2 en schrijf deze achter het woord. 
+De woorden zijn WORDS. Voeg geen extra tekst toe. Scheid woord en naam met - en scheid paren met een nieuwe regel. ";0;none
+"Voor de onderstaande woorden kies NAME1 of NAME2 en schrijf deze naam achter het woord. 
+De woorden zijn WORDS. Voeg geen extra tekst toe. Scheid woord en naam met - en scheid paren met een nieuwe regel. ";0;none
+"Hier zijn een aantal woorden. Voor ieder woord, kies NAME1 of NAME2 en schrijf je keuze achter het woord. 
+De woorden zijn WORDS. Voeg geen extra tekst toe. Scheid woord en naam met - en scheid paren met een nieuwe regel. ";0;none
+Hier is een lijst met Standaardnederlandse en straattaalwoorden. Kies voor elk woord een naam met migratie-achtergrond of zonder migratie-achtergrond: NAME1 of NAME2 en schrijf deze achter het woord. De woorden zijn WORDS. Voeg geen extra tekst toe. Scheid woord en naam met - en scheid paren met een nieuwe regel. ;1;none
+Voor de onderstaande Standaardnederlandse en straattaalwoorden kies een naam met migratie-achtergrond of zonder migratie-achtergrond:NAME1 of NAME2 en schrijf deze naam achter het woord. De woorden zijn WORDS. Voeg geen extra tekst toe. Scheid woord en naam met - en scheid paren met een nieuwe regel. ;1;none
+Hier zijn een aantal Standaardnederlandse en straattaalwoorden. Voor ieder woord, kies voor een naam met migratie-achtergrond of zonder migratie-achtergrond: NAME1 of NAME2 en schrijf je keuze achter het woord. De woorden zijn WORDS. Voeg geen extra tekst toe. Scheid woord en naam met - en scheid paren met een nieuwe regel. ;1;none
+"Hier is een lijst met Standaardnederlandse en straattaalwoorden. Kies voor elk woord een naam met migratie-achtergrond of zonder migratie-achtergrond: NAME1 of NAME2 en schrijf deze achter het woord. 
+De woorden zijn WORDS. Voeg geen extra tekst toe. Scheid woord en naam met - en scheid paren met een nieuwe regel. ";1;none
+"Voor de onderstaande Standaardnederlandse en straattaalwoorden kies een naam met migratie-achtergrond of zonder migratie-achtergrond: NAME1 of NAME2 en schrijf deze naam achter het woord. 
+De woorden zijn WORDS. Voeg geen extra tekst toe. Scheid woord en naam met - en scheid paren met een nieuwe regel. ";1;none
+"Hier zijn een aantal Standaardnederlandse en straattaalwoorden. Voor ieder woord, kies een naam met migratie-achtergrond of zonder migratie-achtergrond: NAME1 of NAME2 en schrijf je keuze achter het woord. 
+De woorden zijn WORDS. Voeg geen extra tekst toe. Scheid woord en naam met - en scheid paren met een nieuwe regel. ";1;none
+"Hier is een lijst met woorden. Kies voor elk woord een naam NAME1 of NAME2 en schrijf deze achter het woord. De woorden zijn WORDS. Voeg geen extra tekst toe. Scheid woord en naam met - en scheid paren met een nieuwe regel. 
+Geef antwoord als iemand die zichzelf als een gebruiker van Straattaal ziet.";0;ingroup
+"Voor de onderstaande woorden kies NAME1 of NAME2 en schrijf deze naam achter het woord. De woorden zijn WORDS. Voeg geen extra tekst toe. Scheid woord en naam met - en scheid paren met een nieuwe regel. 
+Geef antwoord als iemand die zichzelf als een gebruiker van Straattaal ziet.";0;ingroup
+"Hier zijn een aantal woorden. Voor ieder woord, kies voor NAME1 of NAME2 en schrijf je keuze achter het woord. De woorden zijn WORDS. Voeg geen extra tekst toe. Scheid woord en naam met - en scheid paren met een nieuwe regel. 
+Geef antwoord als iemand die zichzelf als een gebruiker van Straattaal ziet.";0;ingroup
+"Hier is een lijst met woorden. Kies voor elk woord een naam NAME1 of NAME2 en schrijf deze achter het woord. 
+De woorden zijn WORDS. Voeg geen extra tekst toe. Scheid woord en naam met - en scheid paren met een nieuwe regel. 
+Geef antwoord als iemand die zichzelf als een gebruiker van Straattaal ziet.";0;ingroup
+"Voor de onderstaande woorden kies NAME1 of NAME2 en schrijf deze naam achter het woord. 
+De woorden zijn WORDS. Voeg geen extra tekst toe. Scheid woord en naam met - en scheid paren met een nieuwe regel. 
+Geef antwoord als iemand die zichzelf als een gebruiker van Straattaal ziet.";0;ingroup
+"Hier zijn een aantal woorden. Voor ieder woord, kies NAME1 of NAME2 en schrijf je keuze achter het woord. 
+De woorden zijn WORDS. Voeg geen extra tekst toe. Scheid woord en naam met - en scheid paren met een nieuwe regel. 
+Geef antwoord als iemand die zichzelf als een gebruiker van Straattaal ziet.";0;ingroup
+"Hier is een lijst met Standaardnederlandse en straattaalwoorden. Kies voor elk woord een naam met migratie-achtergrond of zonder migratie-achtergrond: NAME1 of NAME2 en schrijf deze achter het woord. De woorden zijn WORDS. Voeg geen extra tekst toe. Scheid woord en naam met - en scheid paren met een nieuwe regel. 
+Geef antwoord als iemand die zichzelf als een gebruiker van Straattaal ziet.";1;ingroup
+"Voor de onderstaande Standaardnederlandse en straattaalwoorden kies een naam met migratie-achtergrond of zonder migratie-achtergrond:NAME1 of NAME2 en schrijf deze naam achter het woord. De woorden zijn WORDS. Voeg geen extra tekst toe. Scheid woord en naam met - en scheid paren met een nieuwe regel. 
+Geef antwoord als iemand die zichzelf als een gebruiker van Straattaal ziet.";1;ingroup
+"Hier zijn een aantal Standaardnederlandse en straattaalwoorden. Voor ieder woord, kies voor een naam met migratie-achtergrond of zonder migratie-achtergrond: NAME1 of NAME2 en schrijf je keuze achter het woord. De woorden zijn WORDS. Voeg geen extra tekst toe. Scheid woord en naam met - en scheid paren met een nieuwe regel. 
+Geef antwoord als iemand die zichzelf als een gebruiker van Straattaal ziet.";1;ingroup
+"Hier is een lijst met Standaardnederlandse en straattaalwoorden. Kies voor elk woord een naam met migratie-achtergrond of zonder migratie-achtergrond: NAME1 of NAME2 en schrijf deze achter het woord. 
+De woorden zijn WORDS. Voeg geen extra tekst toe. Scheid woord en naam met - en scheid paren met een nieuwe regel. 
+Geef antwoord als iemand die zichzelf als een gebruiker van Straattaal ziet.";1;ingroup
+"Voor de onderstaande Standaardnederlandse en straattaalwoorden kies een naam met migratie-achtergrond of zonder migratie-achtergrond: NAME1 of NAME2 en schrijf deze naam achter het woord. 
+De woorden zijn WORDS. Voeg geen extra tekst toe. Scheid woord en naam met - en scheid paren met een nieuwe regel. 
+Geef antwoord als iemand die zichzelf als een gebruiker van Straattaal ziet.";1;ingroup
+"Hier zijn een aantal Standaardnederlandse en straattaalwoorden. Voor ieder woord, kies een naam met migratie-achtergrond of zonder migratie-achtergrond: NAME1 of NAME2 en schrijf je keuze achter het woord. 
+De woorden zijn WORDS. Voeg geen extra tekst toe. Scheid woord en naam met - en scheid paren met een nieuwe regel. 
+Geef antwoord als iemand die zichzelf als een gebruiker van Straattaal ziet.";1;ingroup
+"Hier is een lijst met woorden. Kies voor elk woord een naam NAME1 of NAME2 en schrijf deze achter het woord. De woorden zijn WORDS. Voeg geen extra tekst toe. Scheid woord en naam met - en scheid paren met een nieuwe regel. 
+Geef antwoord als iemand die zichzelf niet als een gebruiker van Straattaal ziet.";0;outgroup
+"Voor de onderstaande woorden kies NAME1 of NAME2 en schrijf deze naam achter het woord. De woorden zijn WORDS. Voeg geen extra tekst toe. Scheid woord en naam met - en scheid paren met een nieuwe regel. Geef antwoord als iemand die zichzelf niet als een gebruiker van Straattaal ziet.
+Geef antwoord als iemand die zichzelf niet als een gebruiker van Straattaal ziet.";0;outgroup
+"Hier zijn een aantal woorden. Voor ieder woord, kies voor NAME1 of NAME2 en schrijf je keuze achter het woord. De woorden zijn WORDS. Voeg geen extra tekst toe. Scheid woord en naam met - en scheid paren met een nieuwe regel.
+Geef antwoord als iemand die zichzelf niet als een gebruiker van Straattaal ziet.";0;outgroup
+"Hier is een lijst met woorden. Kies voor elk woord een naam NAME1 of NAME2 en schrijf deze achter het woord. 
+De woorden zijn WORDS. Voeg geen extra tekst toe. Scheid woord en naam met - en scheid paren met een nieuwe regel.
+Geef antwoord als iemand die zichzelf niet als een gebruiker van Straattaal ziet.";0;outgroup
+"Voor de onderstaande woorden kies NAME1 of NAME2 en schrijf deze naam achter het woord. 
+De woorden zijn WORDS. Voeg geen extra tekst toe. Scheid woord en naam met - en scheid paren met een nieuwe regel.
+Geef antwoord als iemand die zichzelf niet als een gebruiker van Straattaal ziet.";0;outgroup
+"Hier zijn een aantal woorden. Voor ieder woord, kies NAME1 of NAME2 en schrijf je keuze achter het woord. 
+De woorden zijn WORDS. Voeg geen extra tekst toe. Scheid woord en naam met - en scheid paren met een nieuwe regel. 
+Geef antwoord als iemand die zichzelf niet als een gebruiker van Straattaal ziet.";0;outgroup
+"Hier is een lijst met Standaardnederlandse en straattaalwoorden. Kies voor elk woord een naam met migratie-achtergrond of zonder migratie-achtergrond: NAME1 of NAME2 en schrijf deze achter het woord. De woorden zijn WORDS. Voeg geen extra tekst toe. Scheid woord en naam met - en scheid paren met een nieuwe regel.
+Geef antwoord als iemand die zichzelf niet als een gebruiker van Straattaal ziet.";1;outgroup
+"Voor de onderstaande Standaardnederlandse en straattaalwoorden kies een naam met migratie-achtergrond of zonder migratie-achtergrond:NAME1 of NAME2 en schrijf deze naam achter het woord. De woorden zijn WORDS. Voeg geen extra tekst toe. Scheid woord en naam met - en scheid paren met een nieuwe regel. 
+Geef antwoord als iemand die zichzelf niet als een gebruiker van Straattaal ziet.";1;outgroup
+"Hier zijn een aantal Standaardnederlandse en straattaalwoorden. Voor ieder woord, kies voor een naam met migratie-achtergrond of zonder migratie-achtergrond: NAME1 of NAME2 en schrijf je keuze achter het woord. De woorden zijn WORDS. Voeg geen extra tekst toe. Scheid woord en naam met - en scheid paren met een nieuwe regel. 
+Geef antwoord als iemand die zichzelf niet als een gebruiker van Straattaal ziet.";1;outgroup
+"Hier is een lijst met Standaardnederlandse en straattaalwoorden. Kies voor elk woord een naam met migratie-achtergrond of zonder migratie-achtergrond: NAME1 of NAME2 en schrijf deze achter het woord. 
+De woorden zijn WORDS. Voeg geen extra tekst toe. Scheid woord en naam met - en scheid paren met een nieuwe regel. 
+Geef antwoord als iemand die zichzelf niet als een gebruiker van Straattaal ziet.";1;outgroup
+"Voor de onderstaande Standaardnederlandse en straattaalwoorden kies een naam met migratie-achtergrond of zonder migratie-achtergrond: NAME1 of NAME2 en schrijf deze naam achter het woord. 
+De woorden zijn WORDS. Voeg geen extra tekst toe. Scheid woord en naam met - en scheid paren met een nieuwe regel. 
+Geef antwoord als iemand die zichzelf niet als een gebruiker van Straattaal ziet.";1;outgroup
+"Hier zijn een aantal Standaardnederlandse en straattaalwoorden. Voor ieder woord, kies een naam met migratie-achtergrond of zonder migratie-achtergrond: NAME1 of NAME2 en schrijf je keuze achter het woord. 
+De woorden zijn WORDS. Voeg geen extra tekst toe. Scheid woord en naam met - en scheid paren met een nieuwe regel. 
+Geef antwoord als iemand die zichzelf niet als een gebruiker van Straattaal ziet.";1;outgroup
