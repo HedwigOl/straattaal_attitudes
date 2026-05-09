@@ -3,7 +3,7 @@ library(irr)
 library(lme4)
 library(broom.mixed)
 
-folder_path <- "\\Straattaal_prompt_responses\\check-betekenis"
+folder_path <- "meaning_checked"
 
 # List all CSV files
 csv_files <- list.files(folder_path, pattern = "\\.csv$", full.names = TRUE)
@@ -72,15 +72,6 @@ table_per_word <- proportion_per_word %>%
 
 write.csv(table_per_word, "table_per_word_LLMs.csv", row.names = FALSE)
 
-# Fit glmer to investigate effect of 'in Straattaal' in prompt
-model <- glmer(
-  check_meaning ~ Straattaal_added + 
-    (1 | word) + 
-    (1 | LLM),
-  data = full_table,
-  family = binomial
-)
-
 # Split for each model
 results <- full_table %>%
   split(.$LLM) %>%
@@ -90,10 +81,11 @@ results <- full_table %>%
     family = binomial
   ))
 
-# Create table with glmer results for each LLM
+# Create table with glmer results for each LLM for addition of 'in Straattaal'
 llm_effects <- map_df(
   results,
   ~ tidy(.x, effects = "fixed"),
   .id = "LLM"
 ) %>%
   filter(term == "Straattaal_added")
+
