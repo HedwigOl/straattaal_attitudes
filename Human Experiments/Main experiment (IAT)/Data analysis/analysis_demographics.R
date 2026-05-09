@@ -59,9 +59,14 @@ demographic_data <- bind_rows(iat_outgroup, iat_ingroup) %>%
     ),
     randstad = if_else(randstad == "Ik twijfel", "Nee", randstad),
     combined_group = case_when(
-      group_membership == "ingroup" & straattaal_user == "Ja" ~ "Ingroup",
+      group_membership == "ingroup"  & straattaal_user == "Ja" ~  "Ingroup",
       group_membership == "outgroup" & straattaal_user == "Nee" ~ "Outgroup",
       TRUE ~ "Inconsistent"
+    ),
+    Membership = if_else(
+      combined_group == "Inconsistent",
+      NA_character_,
+      combined_group
     )
   )
 
@@ -127,3 +132,11 @@ demographic_analysis <- function(data, group_var, iat_data = NULL) {
 demographic_analysis(demographic_data, group_membership, iat_dscores)
 demographic_analysis(demographic_data, straattaal_user,  iat_dscores)
 demographic_analysis(demographic_data, combined_group,   iat_dscores)
+
+# Run analyses for combined group where inconsistent participants are excluded
+filtered_groups <- demographic_data %>%
+  filter(!is.na(Membership))
+filtered_iat <- iat_dscores %>%
+  filter(!is.na(Membership))
+
+demographic_analysis(filtered_groups, Membership, filtered_iat)
