@@ -1,8 +1,4 @@
-#
 
-This is the repository of the master's thesis **"Implicit and Explicit Language Attitudes toward the Dutch Multiethnolect Straattaal in Humans and Large Language Models"**.
-
----
 
 ## Overview
 
